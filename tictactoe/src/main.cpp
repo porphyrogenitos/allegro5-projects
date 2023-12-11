@@ -7,6 +7,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include "Model.h"
 
 const int DISP_WIDTH = 640;
 const int DISP_HEIGHT = 480;
@@ -18,113 +19,6 @@ const ALLEGRO_COLOR X_SYMB_COLOR = al_map_rgb(0, 80, 255);
 const ALLEGRO_COLOR O_SYMB_COLOR = al_map_rgb(255, 255, 255);
 const int FONT_CENTER_X = DISP_WIDTH / 2;
 const int FONT_CENTER_Y = 30;
-
-class Model {
-    private:
-        char board[3][3]
-        {
-            {' ', ' ', ' '},
-            {' ', ' ', ' '},
-            {' ', ' ', ' '}
-        };
-        char winner {' '};
-        char cur_player {'X'};
-        int num_plays = {0};
-        int board_size = 3;
-        bool is_finished = false;
-
-    public:
-        char get_symbol(int r, int c) {
-            return board[r][c];
-        }
-        int get_board_size() {
-            return board_size;
-        }
-
-        char get_cur_player() {
-            return cur_player;
-        }
-
-        char get_winner() {
-            return winner;
-        }
-
-        bool has_winner() {
-            return get_winner() == 'X' || get_winner() == 'O';
-        }
-
-        bool board_is_full() {
-            return num_plays == 9;
-        }
-
-        // Update board with the move of cur_player, checking first if they can even make a move.
-        // Then check if the cur_player has won.
-        // If they didn't win, update cur_player to the next player turn.
-        void play(int r, int c) {
-            if (is_finished || !is_slot_available(r, c))
-                return;
-
-            board[r][c] = cur_player;
-
-            // Check row
-            for (int i = 0; i < board_size; i++) {
-                if (board[i][c] != cur_player)
-                    break;
-                if (i == board_size - 1) {
-                    winner = cur_player;
-                    is_finished = true;
-                    return;
-                }
-            }
-
-            // Check column
-            for (int i = 0; i < board_size; i++) {
-                if (board[r][i] != cur_player)
-                    break;
-                if (i == board_size - 1) {
-                    winner = cur_player;
-                    is_finished = true;
-                    return;
-                }
-            }
-
-            // Check diagonal (from top-left corner)
-            for (int i = 0; i < board_size; i++) {
-                if (board[i][i] != cur_player)
-                    break;
-                if (i == board_size - 1) {
-                    winner = cur_player;
-                    is_finished = true;
-                    return;
-                }
-            }
-
-            // Check diagonal (from top-right corner)
-            for (int i = 0; i < board_size; i++) {
-                if (board[i][board_size - i] != cur_player)
-                    break;
-                if (i == board_size - 1) {
-                    winner = cur_player;
-                    is_finished = true;
-                    return;
-                }
-            }
-
-            num_plays++;
-
-            if (cur_player == 'X')
-                cur_player = 'O';
-            else
-                cur_player = 'X';
-
-            if (board_is_full())
-                is_finished = true;
-        }
-
-        char is_slot_available(int r, int c) {
-            return board[r][c] == ' ';
-        }
-};
 
 // parameters indicate bounding box
 void draw_symbol_X(int x1, int y1, int x2, int y2, ALLEGRO_COLOR color) {
