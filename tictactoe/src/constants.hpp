@@ -1,0 +1,10 @@
+const int DISP_WIDTH = 640;
+const int DISP_HEIGHT = 480;
+const int BOARD_LINE_LENGTH = 250;
+const int BOARD_X = (DISP_WIDTH - BOARD_LINE_LENGTH) / 2; // top-left corner of board (x-coord)
+const int BOARD_Y = (DISP_HEIGHT - BOARD_LINE_LENGTH) / 2; // top-left corner of board (y-coord)
+const int SLOT_SIDE_LENGTH = 250 / 3; // side length of each of the nine slots
+const ALLEGRO_COLOR X_SYMB_COLOR = al_map_rgb(0, 80, 255);
+const ALLEGRO_COLOR O_SYMB_COLOR = al_map_rgb(255, 255, 255);
+const int FONT_CENTER_X = DISP_WIDTH / 2;
+const int FONT_CENTER_Y = 30;
