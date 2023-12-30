@@ -8,7 +8,7 @@ protected:
 
     ModelPlayTest() {
         // You can do set-up work for each test here.
-        
+
     }
 /*
     ~ModelPlayTest() override {
@@ -27,9 +27,19 @@ protected:
         // Code here will be called immediately after each test (right
         // before the destructor).
     }
+*/
 
+    void WinTesterAcross(char symbol) {
 
-    Model model {};
+    }
+
+    void WinTesterDown(char symbol) {
+
+    }
+
+    void WinTesterDiagonal(char symbol) {
+
+    }
 };
 
 TEST(ModelTest, GetSymbol) {
