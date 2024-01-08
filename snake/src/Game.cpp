@@ -33,6 +33,7 @@ int main() {
     Snake snake {Direction::east};
     snake.update_head_dir(Direction::north);
     snake.print();
+    std::cout << "Direction[0] is " << direction_to_string(snake.get_direction_arr()[0]) << std::endl;
 
     while (true) {
         al_wait_for_event(event_queue, &event);
