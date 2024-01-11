@@ -30,9 +30,13 @@ class Snake {
          * 
          * @return int 
          */
-        int getLength() const { return length; }
+        int get_length() const { return length; }
 
         const std::array<Direction, 100>& get_direction_arr() const;
+
+        Direction get_segment_direction(int index) const;
+
+        Direction get_segment_position(int index) const;
 
         void move();
 

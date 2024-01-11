@@ -1,6 +1,28 @@
 #include "Snake.hpp"
 
 /**
+ * @brief Returns the direction of velocity of a Snake segment.
+ * 
+ * @param index The index of the segment (in direction_arr).
+ * @return Direction 
+ */
+Direction Snake::get_segment_direction(int index) const {
+	return direction_arr[index];
+}
+
+/**
+ * @brief Returns the positional direction of a Snake segment relative to the segment in front.
+ * 
+ * @param index The index of the segment (in direction_arr).
+ * @return Direction 
+ */
+Direction Snake::get_segment_position(int index) const {
+	// The position of a segment S1 relative to the segment in front S0 is the opposite
+	// direction of S0.
+	return get_opposite_dir(direction_arr[index]);
+}
+
+/**
  * @brief Snake moves by one. Updates the direction of each segment.
  * 
  */
@@ -44,17 +66,13 @@ void Snake::grow() {
 	direction_arr[length - 1] = direction_arr[length - 2];
 }
 
-const std::array<Direction, 100>& Snake::get_direction_arr() const{
-	return direction_arr;
-}
-
 /**
  * @brief Temporary print function, just for debugging.
  * 
  */
 void Snake::print() {
 
-	for (int i = 0; i < getLength(); i++) {
+	for (int i = 0; i < get_length(); i++) {
 		std::string dir = direction_to_string(direction_arr[i]);
 		std::cout << std::to_string(i) << "," << dir << " "; 
 	}
