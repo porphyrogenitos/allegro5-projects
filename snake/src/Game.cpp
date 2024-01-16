@@ -8,6 +8,7 @@
 
 const int DISP_WIDTH = 640;
 const int DISP_HEIGHT = 480;
+const int TILE_WIDTH = 20;
 
 void draw_snake(Snake snake, int head_x, int head_y) {
     int cur_x = head_x;
@@ -73,6 +74,46 @@ void snake_update_tilegrid(Snake snake, int head_row, int head_col, TileGrid& ti
     }
 }
 
+void draw_tilegrid(TileGrid& tilegrid) {
+    for (int row = 0; row < tilegrid.num_rows; row++) {
+        for (int col = 0; col < tilegrid.num_cols; col++) {
+            //TODO: Calculate (x1, y) and (x2, y2) of tile (i.e. top-left and bottom-right corners).
+            int x1 = col * TILE_WIDTH;
+            int y1 = row * TILE_WIDTH;
+            int x2 = (col + 1) * TILE_WIDTH;
+            int y2 = (row + 1) * TILE_WIDTH;
+
+            int head_center_x = (x1 + x2) / 2;
+            int head_center_y = (y1 + y2) / 2;
+            float rad = TILE_WIDTH / 2;
+
+            
+
+            Tile tile = tilegrid.board[row][col];
+            switch (tile)
+            {
+            case Tile::empty:
+                // No drawing. Takes on background color.
+                break;
+            case Tile::snake_head:
+                al_draw_filled_circle(head_center_x, head_center_y, rad, al_map_rgb(255, 0, 0));
+                break;
+            case Tile::snake_body:
+                al_draw_filled_circle(head_center_x, head_center_y, rad, al_map_rgb(0, 255, 0));
+                break;
+            case Tile::food:
+                /* code */
+                break;
+            
+            default:
+                break;
+            }
+
+            al_draw_rectangle(x1, y1, x2, y2, al_map_rgb(255, 0, 0), 1); //Temporary: Just to help verify.
+        }
+    }
+}
+
 int main() {
     al_init();
     al_install_keyboard();
@@ -98,19 +139,18 @@ int main() {
     ALLEGRO_EVENT event {};
     al_start_timer(timer);
 
-    TileGrid tilegrid {DISP_WIDTH, DISP_HEIGHT, 20};
+    TileGrid tilegrid {DISP_WIDTH, DISP_HEIGHT, TILE_WIDTH};
     
 
     Snake snake {Direction::east};
     snake.update_head_dir(Direction::north);
     snake.print();
-    int head_x = 200;
-    int head_y = 200;
 
     int head_r = 10;
     int head_c = 10;
-    draw_snake(snake, head_x, head_y);
+    //draw_snake(snake, head_x, head_y);
     snake_update_tilegrid(snake, head_r, head_c, tilegrid);
+    draw_tilegrid(tilegrid);
     std::cout << tilegrid.to_string();
     al_flip_display();
 
@@ -123,17 +163,16 @@ int main() {
                 redraw = true;
                 break;
             case ALLEGRO_EVENT_KEY_DOWN:
+                head_r -= 1; // Move up head (temporary lien)
                 snake.move();
                 snake.print();
 
                 snake_update_tilegrid(snake, head_r, head_c, tilegrid);
                 std::cout << tilegrid.to_string();
                 
-                /*Just some lines to redraw the snake.*/
-                head_y -= 20; // Since head's velocity is North
-                head_r -= 1;
                 al_clear_to_color(al_map_rgb(0, 0, 0));
-                draw_snake(snake, head_x, head_y);
+                draw_tilegrid(tilegrid);
+
                 al_flip_display();
                 break;
 
