@@ -13,40 +13,8 @@ const int TILE_WIDTH = 20;
 const int KEY_SEEN = 1;
 const int KEY_RELEASED = 2;
 
-void clear_snake(Snake snake) {
 
-    int cur_row = snake.get_head_r();
-    int cur_col = snake.get_head_c();
-
-    for (int index = 1; index < snake.get_length(); index++) {
-        Direction pos = snake.get_segment_position(index);
-        switch (pos) {
-            case Direction::north:
-                cur_row -= 1;
-                break;
-            case Direction::south:
-                cur_row += 1;
-                break;
-            case Direction::east:
-                cur_col += 1;
-                break;
-            case Direction::west:
-                cur_col -= 1;
-                break;
-            default:
-                break;
-        }
-
-        int x1 = cur_col * TILE_WIDTH;
-        int y1 = cur_row * TILE_WIDTH;
-        int x2 = (cur_col + 1) * TILE_WIDTH;
-        int y2 = (cur_row + 1) * TILE_WIDTH;
-
-        al_draw_filled_rectangle(x1, y1, x2, y2, al_map_rgb(0, 0, 0));
-    }
-}
-
-void draw_snake(Snake snake) {
+void display_snake(Snake snake, bool isVisible) {
     int cur_row = snake.get_head_r();
     int cur_col = snake.get_head_c();
 
@@ -59,7 +27,14 @@ void draw_snake(Snake snake) {
     int center_x = (x1 + x2) / 2;
     int center_y = (y1 + y2) / 2;
     float rad = TILE_WIDTH / 2;
-    al_draw_filled_circle(center_x, center_y, rad, al_map_rgb(255, 0, 0));
+    if (isVisible)
+        al_draw_filled_circle(center_x, center_y, rad, al_map_rgb(255, 0, 0)); // Red head
+    else
+        al_draw_filled_circle(center_x, center_y, rad, al_map_rgb(0, 0, 0));
+
+    ALLEGRO_COLOR body_color = al_map_rgb(0, 255, 0); // Green
+    if (!isVisible)
+        body_color = al_map_rgb(0, 0, 0); // Black (not visible)
 
     // Draw body.
     for (int index = 1; index < snake.get_length(); index++) {
@@ -90,10 +65,16 @@ void draw_snake(Snake snake) {
         int center_y = (y1 + y2) / 2;
         float rad = TILE_WIDTH / 2;
 
-        al_draw_filled_circle(center_x, center_y, rad, al_map_rgb(0, 255, 0));
+        al_draw_filled_circle(center_x, center_y, rad, body_color);
     }
 }
 
+/**
+ * @brief Temporary function for making the grid of tiles visible.
+ * 
+ * @param num_rows 
+ * @param num_cols 
+ */
 void draw_grid(int num_rows, int num_cols) {
     for (int row = 0; row < num_rows; row++) {
         int y = row * TILE_WIDTH;
@@ -139,10 +120,10 @@ int main() {
     
 
     Snake snake {Direction::east, 10, 10};
-    //snake.update_head_dir(Direction::north);
     snake.print();
 
-    draw_snake(snake);
+    //draw_snake(snake);
+    display_snake(snake, true);
     draw_grid(tilegrid_num_rows, tilegrid_num_cols);
     al_flip_display();
 
@@ -185,10 +166,10 @@ int main() {
             break;
 
         if (redraw && al_event_queue_is_empty(event_queue)) {
-            clear_snake(snake);
+            display_snake(snake, false);
             snake.move();
 
-            draw_snake(snake);
+            display_snake(snake, true);
 
             draw_grid(tilegrid_num_rows, tilegrid_num_cols);
 
