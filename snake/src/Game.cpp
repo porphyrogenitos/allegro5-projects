@@ -10,42 +10,6 @@ const int DISP_WIDTH = 640;
 const int DISP_HEIGHT = 480;
 const int TILE_WIDTH = 20;
 
-void draw_snake(Snake snake, int head_x, int head_y) {
-    int cur_x = head_x;
-    int cur_y = head_y;
-    int seg_rad = 10;
-
-    // Draw head.
-    al_draw_filled_circle(cur_x, cur_y, (float)seg_rad, al_map_rgb(255, 0, 0));
-    int index = 1;
-
-    while (index < snake.get_length()) {
-        Direction pos = snake.get_segment_position(index);
-        switch (pos) {
-            case Direction::north:
-                cur_y -= seg_rad * 2;
-                break;
-            case Direction::south:
-                cur_y += seg_rad * 2;
-                break;
-            case Direction::east:
-                cur_x += seg_rad * 2;
-                break;
-            case Direction::west:
-                cur_x -= seg_rad * 2;
-                break;
-            default:
-                break;
-        }
-
-        al_draw_filled_circle(cur_x, cur_y, (float)seg_rad, al_map_rgb(0, 255, 0));
-        index++;
-    }
-
-}
-
-
-
 void tilegrid_update_snake(Snake snake, TileGrid& tilegrid) {
 
     tilegrid.update_tile(snake.get_head_r(), snake.get_head_c(), Tile::snake_head);
@@ -257,7 +221,7 @@ int main() {
                 redraw = true;
                 break;
             case ALLEGRO_EVENT_KEY_DOWN:
-                al_clear_to_color(al_map_rgb(0, 0, 0));
+                //al_clear_to_color(al_map_rgb(0, 0, 0));
                 clear_snake(snake, tilegrid);
                 clear_snake_from_tilegrid(snake, tilegrid);
                 //al_flip_display();
