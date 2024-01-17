@@ -39,9 +39,7 @@ void tilegrid_update_snake(Snake snake, TileGrid& tilegrid) {
     }
 }
 
-void clear_snake(Snake snake, TileGrid tilegrid) {
-
-    //tilegrid.update_tile(snake.get_head_r(), snake.get_head_c(), Tile::empty);
+void clear_snake(Snake snake) {
 
     int cur_row = snake.get_head_r();
     int cur_col = snake.get_head_c();
@@ -70,14 +68,11 @@ void clear_snake(Snake snake, TileGrid tilegrid) {
         int x2 = (cur_col + 1) * TILE_WIDTH;
         int y2 = (cur_row + 1) * TILE_WIDTH;
 
-        //tilegrid.update_tile(cur_row, cur_col, Tile::empty);
         al_draw_filled_rectangle(x1, y1, x2, y2, al_map_rgb(0, 0, 0));
     }
 }
 
 void clear_snake_from_tilegrid(Snake snake, TileGrid& tilegrid) {
-
-    //tilegrid.update_tile(snake.get_head_r(), snake.get_head_c(), Tile::empty);
 
     int cur_row = snake.get_head_r();
     int cur_col = snake.get_head_c();
@@ -107,13 +102,9 @@ void clear_snake_from_tilegrid(Snake snake, TileGrid& tilegrid) {
     }
 }
 
-void draw_snake2(Snake snake, TileGrid tilegrid) {
-
-
+void draw_snake(Snake snake) {
     int cur_row = snake.get_head_r();
     int cur_col = snake.get_head_c();
-
-    
 
     // Draw head.
     int x1 = cur_col * TILE_WIDTH;
@@ -207,7 +198,7 @@ int main() {
 
     //draw_snake(snake, head_x, head_y);
     tilegrid_update_snake(snake, tilegrid);
-    draw_snake2(snake, tilegrid);
+    draw_snake(snake, tilegrid);
     draw_grid(tilegrid);
     std::cout << tilegrid.to_string();
     al_flip_display();
@@ -233,17 +224,13 @@ int main() {
             break;
 
         if (redraw && al_event_queue_is_empty(event_queue)) {
-            clear_snake(snake, tilegrid);
+            clear_snake(snake);
             clear_snake_from_tilegrid(snake, tilegrid);
-            //al_flip_display();
             snake.move();
 
-            
-
             tilegrid_update_snake(snake, tilegrid);
-            draw_snake2(snake, tilegrid);
+            draw_snake(snake);
             std::cout << tilegrid.to_string() << "\n";
-            
 
             draw_grid(tilegrid);
 
