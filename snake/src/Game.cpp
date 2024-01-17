@@ -218,25 +218,10 @@ int main() {
 
         switch(event.type) {
             case ALLEGRO_EVENT_TIMER:
-                redraw = true;
+                //redraw = true;
                 break;
             case ALLEGRO_EVENT_KEY_DOWN:
-                //al_clear_to_color(al_map_rgb(0, 0, 0));
-                clear_snake(snake, tilegrid);
-                clear_snake_from_tilegrid(snake, tilegrid);
-                //al_flip_display();
-                snake.move();
-
-                
-
-                tilegrid_update_snake(snake, tilegrid);
-                draw_snake2(snake, tilegrid);
-                std::cout << tilegrid.to_string() << "\n";
-                
-
-                draw_grid(tilegrid);
-
-                al_flip_display();
+                redraw = true;
                 break;
 
             case ALLEGRO_EVENT_DISPLAY_CLOSE:
@@ -248,8 +233,23 @@ int main() {
             break;
 
         if (redraw && al_event_queue_is_empty(event_queue)) {
+            clear_snake(snake, tilegrid);
+            clear_snake_from_tilegrid(snake, tilegrid);
+            //al_flip_display();
+            snake.move();
 
+            
 
+            tilegrid_update_snake(snake, tilegrid);
+            draw_snake2(snake, tilegrid);
+            std::cout << tilegrid.to_string() << "\n";
+            
+
+            draw_grid(tilegrid);
+
+            al_flip_display();
+            
+            redraw = false;
         }
     }
     al_destroy_timer(timer);
