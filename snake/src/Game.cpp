@@ -75,17 +75,14 @@ void tilegrid_update_snake(Snake snake, TileGrid& tilegrid) {
     }
 }
 
-// TODO: This is obviously very poor code.
-// TODO: I'm starting to think it will be best to have something other than the TileGrid draw snakes and food. Because
-// I'm having to clear the snake not only from the display but from the TileGrid model too and that's inefficient.
 void clear_snake(Snake snake, TileGrid tilegrid) {
 
-    tilegrid.update_tile(snake.get_head_r(), snake.get_head_c(), Tile::empty);
+    //tilegrid.update_tile(snake.get_head_r(), snake.get_head_c(), Tile::empty);
 
     int cur_row = snake.get_head_r();
     int cur_col = snake.get_head_c();
 
-    for (int index = 0; index < snake.get_length(); index++) {
+    for (int index = 1; index < snake.get_length(); index++) {
         Direction pos = snake.get_segment_position(index);
         switch (pos) {
             case Direction::north:
@@ -109,44 +106,103 @@ void clear_snake(Snake snake, TileGrid tilegrid) {
         int x2 = (cur_col + 1) * TILE_WIDTH;
         int y2 = (cur_row + 1) * TILE_WIDTH;
 
-        tilegrid.update_tile(cur_row, cur_col, Tile::empty);
+        //tilegrid.update_tile(cur_row, cur_col, Tile::empty);
         al_draw_filled_rectangle(x1, y1, x2, y2, al_map_rgb(0, 0, 0));
     }
 }
 
-void draw_tilegrid(TileGrid& tilegrid) {
+void clear_snake_from_tilegrid(Snake snake, TileGrid& tilegrid) {
+
+    //tilegrid.update_tile(snake.get_head_r(), snake.get_head_c(), Tile::empty);
+
+    int cur_row = snake.get_head_r();
+    int cur_col = snake.get_head_c();
+
+    tilegrid.update_tile(snake.get_head_r(), snake.get_head_c(), Tile::empty);
+
+    for (int index = 1; index < snake.get_length(); index++) {
+        Direction pos = snake.get_segment_position(index);
+        switch (pos) {
+            case Direction::north:
+                cur_row -= 1;
+                break;
+            case Direction::south:
+                cur_row += 1;
+                break;
+            case Direction::east:
+                cur_col += 1;
+                break;
+            case Direction::west:
+                cur_col -= 1;
+                break;
+            default:
+                break;
+        }
+
+        tilegrid.update_tile(cur_row, cur_col, Tile::empty);
+    }
+}
+
+void draw_snake2(Snake snake, TileGrid tilegrid) {
+
+
+    int cur_row = snake.get_head_r();
+    int cur_col = snake.get_head_c();
+
+    
+
+    // Draw head.
+    int x1 = cur_col * TILE_WIDTH;
+    int y1 = cur_row * TILE_WIDTH;
+    int x2 = (cur_col + 1) * TILE_WIDTH;
+    int y2 = (cur_row + 1) * TILE_WIDTH;
+
+    int center_x = (x1 + x2) / 2;
+    int center_y = (y1 + y2) / 2;
+    float rad = TILE_WIDTH / 2;
+    al_draw_filled_circle(center_x, center_y, rad, al_map_rgb(255, 0, 0));
+
+    // Draw body.
+    for (int index = 1; index < snake.get_length(); index++) {
+        Direction pos = snake.get_segment_position(index);
+        switch (pos) {
+            case Direction::north:
+                cur_row -= 1;
+                break;
+            case Direction::south:
+                cur_row += 1;
+                break;
+            case Direction::east:
+                cur_col += 1;
+                break;
+            case Direction::west:
+                cur_col -= 1;
+                break;
+            default:
+                break;
+        }
+
+        int x1 = cur_col * TILE_WIDTH;
+        int y1 = cur_row * TILE_WIDTH;
+        int x2 = (cur_col + 1) * TILE_WIDTH;
+        int y2 = (cur_row + 1) * TILE_WIDTH;
+
+        int center_x = (x1 + x2) / 2;
+        int center_y = (y1 + y2) / 2;
+        float rad = TILE_WIDTH / 2;
+
+        //tilegrid.update_tile(cur_row, cur_col, Tile::empty);
+        al_draw_filled_circle(center_x, center_y, rad, al_map_rgb(0, 255, 0));
+    }
+}
+
+void draw_grid(TileGrid& tilegrid) {
     for (int row = 0; row < tilegrid.num_rows; row++) {
         for (int col = 0; col < tilegrid.num_cols; col++) {
             int x1 = col * TILE_WIDTH;
             int y1 = row * TILE_WIDTH;
             int x2 = (col + 1) * TILE_WIDTH;
             int y2 = (row + 1) * TILE_WIDTH;
-
-            int head_center_x = (x1 + x2) / 2;
-            int head_center_y = (y1 + y2) / 2;
-            float rad = TILE_WIDTH / 2;
-
-            
-
-            Tile tile = tilegrid.board[row][col];
-            switch (tile)
-            {
-            case Tile::empty:
-                // No drawing. Takes on background color.
-                break;
-            case Tile::snake_head:
-                al_draw_filled_circle(head_center_x, head_center_y, rad, al_map_rgb(255, 0, 0));
-                break;
-            case Tile::snake_body:
-                al_draw_filled_circle(head_center_x, head_center_y, rad, al_map_rgb(0, 255, 0));
-                break;
-            case Tile::food:
-                /* code */
-                break;
-            
-            default:
-                break;
-            }
 
             al_draw_rectangle(x1, y1, x2, y2, al_map_rgb(255, 0, 0), 1); //Temporary: Just to help verify.
         }
@@ -187,7 +243,8 @@ int main() {
 
     //draw_snake(snake, head_x, head_y);
     tilegrid_update_snake(snake, tilegrid);
-    draw_tilegrid(tilegrid);
+    draw_snake2(snake, tilegrid);
+    draw_grid(tilegrid);
     std::cout << tilegrid.to_string();
     al_flip_display();
 
@@ -200,17 +257,20 @@ int main() {
                 redraw = true;
                 break;
             case ALLEGRO_EVENT_KEY_DOWN:
+                al_clear_to_color(al_map_rgb(0, 0, 0));
                 clear_snake(snake, tilegrid);
-                al_flip_display();
+                clear_snake_from_tilegrid(snake, tilegrid);
+                //al_flip_display();
                 snake.move();
-                snake.print();
-                std::cout << std::to_string(snake.get_length()) << "\n";
+
+                
 
                 tilegrid_update_snake(snake, tilegrid);
-                std::cout << tilegrid.to_string();
+                draw_snake2(snake, tilegrid);
+                std::cout << tilegrid.to_string() << "\n";
                 
-                al_clear_to_color(al_map_rgb(0, 0, 0));
-                draw_tilegrid(tilegrid);
+
+                draw_grid(tilegrid);
 
                 al_flip_display();
                 break;
