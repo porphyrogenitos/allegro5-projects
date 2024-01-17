@@ -10,6 +10,8 @@ const int DISP_WIDTH = 640;
 const int DISP_HEIGHT = 480;
 const int TILE_WIDTH = 20;
 
+const int KEY_SEEN = 1;
+const int KEY_RELEASED = 2;
 
 void clear_snake(Snake snake) {
 
@@ -109,7 +111,7 @@ int main() {
     al_install_keyboard();
     al_init_primitives_addon();
 
-    ALLEGRO_TIMER* timer { al_create_timer(ALLEGRO_BPS_TO_SECS(30.0))};
+    ALLEGRO_TIMER* timer { al_create_timer(ALLEGRO_BPS_TO_SECS(10.0))};
     ALLEGRO_EVENT_QUEUE* event_queue {al_create_event_queue()};
 
     al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
@@ -120,6 +122,9 @@ int main() {
     al_register_event_source(event_queue, al_get_display_event_source(display));
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
 
+    unsigned char key[ALLEGRO_KEY_MAX];
+    memset(key, 0, sizeof(key));
+
     al_clear_to_color(al_map_rgb(0, 0, 0));
     al_flip_display();
 
@@ -129,14 +134,12 @@ int main() {
     ALLEGRO_EVENT event {};
     al_start_timer(timer);
 
-    TileGrid tilegrid {DISP_WIDTH, DISP_HEIGHT, TILE_WIDTH};
-
     int tilegrid_num_rows = DISP_HEIGHT / TILE_WIDTH;
     int tilegrid_num_cols = DISP_WIDTH / TILE_WIDTH;
     
 
     Snake snake {Direction::east, 10, 10};
-    snake.update_head_dir(Direction::north);
+    //snake.update_head_dir(Direction::north);
     snake.print();
 
     draw_snake(snake);
@@ -149,12 +152,30 @@ int main() {
 
         switch(event.type) {
             case ALLEGRO_EVENT_TIMER:
-                //redraw = true;
-                break;
-            case ALLEGRO_EVENT_KEY_DOWN:
+                if(key[ALLEGRO_KEY_UP])
+                    snake.update_head_dir(Direction::north);
+                else if(key[ALLEGRO_KEY_DOWN])
+                    snake.update_head_dir(Direction::south);
+                else if(key[ALLEGRO_KEY_LEFT])
+                   snake.update_head_dir(Direction::west);
+                else if(key[ALLEGRO_KEY_RIGHT])
+                    snake.update_head_dir(Direction::east);
+
+                if(key[ALLEGRO_KEY_ESCAPE])
+                    done = true;
+
+                for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
+                    key[i] &= KEY_SEEN;
+
                 redraw = true;
                 break;
+            case ALLEGRO_EVENT_KEY_DOWN:
+                key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
+                break;
 
+            case ALLEGRO_EVENT_KEY_UP:
+                key[event.keyboard.keycode] &= KEY_RELEASED;
+                break;
             case ALLEGRO_EVENT_DISPLAY_CLOSE:
                 done = true;
                 break;
