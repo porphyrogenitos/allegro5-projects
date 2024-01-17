@@ -10,6 +10,8 @@
 class Snake {
     private:
         int length {};
+        int head_r {}; // Row position of head (in TileGrid)
+        int head_c {}; // Column position of head (in TileGrid)
         std::array<Direction, 100> direction_arr {};
         
     public:
@@ -18,8 +20,10 @@ class Snake {
          * 
          * @param init_dir The initial direction of the snake.
          */
-        Snake(Direction init_dir) {
+        Snake(Direction init_dir, int head_r, int head_c) {
             length = 5;
+            this->head_r = head_r;
+            this->head_c = head_c;
             for (int i = 0; i < length; i++) {
                 direction_arr[i] = init_dir;
             }
@@ -31,6 +35,10 @@ class Snake {
          * @return int 
          */
         int get_length() const { return length; }
+
+        int get_head_r() const { return head_r; }
+
+        int get_head_c() const { return head_c; }
 
         Direction get_segment_direction(int index) const;
 

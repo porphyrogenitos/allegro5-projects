@@ -27,6 +27,26 @@ Direction Snake::get_segment_position(int index) const {
  * 
  */
 void Snake::move() {
+	// Move head row-columns position
+	switch (direction_arr[0])
+	{
+	case Direction::east:
+		head_c++;
+		break;
+	case Direction::west:
+		head_c--;
+		break;
+	case Direction::north:
+		head_r--;
+		break;
+	case Direction::south:
+		head_r++;
+		break;
+	
+	default:
+		break;
+	}
+	
 	for (int i = length - 1; i > 0; i--) {
 		direction_arr[i] = direction_arr[i - 1];
 	}

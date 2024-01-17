@@ -44,13 +44,14 @@ void draw_snake(Snake snake, int head_x, int head_y) {
 
 }
 
-void snake_update_tilegrid(Snake snake, int head_row, int head_col, TileGrid& tilegrid) {
-    tilegrid.clear_tiles(); //TODO: Change this once we implement food or else the food tile will be erased.
 
-    tilegrid.update_tile(head_row, head_col, Tile::snake_head);
 
-    int cur_row = head_row;
-    int cur_col = head_col;
+void tilegrid_update_snake(Snake snake, TileGrid& tilegrid) {
+
+    tilegrid.update_tile(snake.get_head_r(), snake.get_head_c(), Tile::snake_head);
+
+    int cur_row = snake.get_head_r();
+    int cur_col = snake.get_head_c();
 
     for (int index = 1; index < snake.get_length(); index++) {
         Direction pos = snake.get_segment_position(index);
@@ -74,10 +75,48 @@ void snake_update_tilegrid(Snake snake, int head_row, int head_col, TileGrid& ti
     }
 }
 
+// TODO: This is obviously very poor code.
+// TODO: I'm starting to think it will be best to have something other than the TileGrid draw snakes and food. Because
+// I'm having to clear the snake not only from the display but from the TileGrid model too and that's inefficient.
+void clear_snake(Snake snake, TileGrid tilegrid) {
+
+    tilegrid.update_tile(snake.get_head_r(), snake.get_head_c(), Tile::empty);
+
+    int cur_row = snake.get_head_r();
+    int cur_col = snake.get_head_c();
+
+    for (int index = 0; index < snake.get_length(); index++) {
+        Direction pos = snake.get_segment_position(index);
+        switch (pos) {
+            case Direction::north:
+                cur_row -= 1;
+                break;
+            case Direction::south:
+                cur_row += 1;
+                break;
+            case Direction::east:
+                cur_col += 1;
+                break;
+            case Direction::west:
+                cur_col -= 1;
+                break;
+            default:
+                break;
+        }
+
+        int x1 = cur_col * TILE_WIDTH;
+        int y1 = cur_row * TILE_WIDTH;
+        int x2 = (cur_col + 1) * TILE_WIDTH;
+        int y2 = (cur_row + 1) * TILE_WIDTH;
+
+        tilegrid.update_tile(cur_row, cur_col, Tile::empty);
+        al_draw_filled_rectangle(x1, y1, x2, y2, al_map_rgb(0, 0, 0));
+    }
+}
+
 void draw_tilegrid(TileGrid& tilegrid) {
     for (int row = 0; row < tilegrid.num_rows; row++) {
         for (int col = 0; col < tilegrid.num_cols; col++) {
-            //TODO: Calculate (x1, y) and (x2, y2) of tile (i.e. top-left and bottom-right corners).
             int x1 = col * TILE_WIDTH;
             int y1 = row * TILE_WIDTH;
             int x2 = (col + 1) * TILE_WIDTH;
@@ -142,14 +181,12 @@ int main() {
     TileGrid tilegrid {DISP_WIDTH, DISP_HEIGHT, TILE_WIDTH};
     
 
-    Snake snake {Direction::east};
+    Snake snake {Direction::east, 10, 10};
     snake.update_head_dir(Direction::north);
     snake.print();
 
-    int head_r = 10;
-    int head_c = 10;
     //draw_snake(snake, head_x, head_y);
-    snake_update_tilegrid(snake, head_r, head_c, tilegrid);
+    tilegrid_update_snake(snake, tilegrid);
     draw_tilegrid(tilegrid);
     std::cout << tilegrid.to_string();
     al_flip_display();
@@ -163,11 +200,13 @@ int main() {
                 redraw = true;
                 break;
             case ALLEGRO_EVENT_KEY_DOWN:
-                head_r -= 1; // Move up head (temporary lien)
+                clear_snake(snake, tilegrid);
+                al_flip_display();
                 snake.move();
                 snake.print();
+                std::cout << std::to_string(snake.get_length()) << "\n";
 
-                snake_update_tilegrid(snake, head_r, head_c, tilegrid);
+                tilegrid_update_snake(snake, tilegrid);
                 std::cout << tilegrid.to_string();
                 
                 al_clear_to_color(al_map_rgb(0, 0, 0));
