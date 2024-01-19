@@ -1,9 +1,12 @@
 #include <iostream>
+#include <utility>
+#include <unordered_set>
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_primitives.h>
 #include "Snake.cpp"
 #include "Direction.hpp"
 #include "TileGrid.hpp"
+#include "Food.hpp"
 
 
 const int DISP_WIDTH = 640;
@@ -12,6 +15,36 @@ const int TILE_WIDTH = 20;
 
 const int KEY_SEEN = 1;
 const int KEY_RELEASED = 2;
+
+int tilegrid_num_rows = DISP_HEIGHT / TILE_WIDTH;
+int tilegrid_num_cols = DISP_WIDTH / TILE_WIDTH;
+std::unordered_set<std::pair<int, int>> occupied_tiles {};
+
+
+void display_food(Food food, bool isVisible) {
+    int x1 = food.col * TILE_WIDTH;
+    int y1 = food.row * TILE_WIDTH;
+    int x2 = (food.col + 1) * TILE_WIDTH;
+    int y2 = (food.row + 1) * TILE_WIDTH;
+
+    int center_x = (x1 + x2) / 2;
+    int center_y = (y1 + y2) / 2;
+    float rad = TILE_WIDTH / 2;
+
+    if (isVisible)
+        al_draw_filled_circle(center_x, center_y, rad, al_map_rgb(50, 100, 10));
+    else
+        al_draw_filled_circle(center_x, center_y, rad, al_map_rgb(0, 0, 0));
+}
+
+void move_food(Food& food, int row, int col) {
+    food.row = row;
+    food.col = col;
+}
+
+bool is_collision(int r1, int c1, int r2, int c2) {
+    return (r1 == r2) && (c1 == c2);
+}
 
 
 void display_snake(Snake snake, bool isVisible) {
@@ -87,12 +120,31 @@ void draw_grid(int num_rows, int num_cols) {
     }
 }
 
+std::pair<int, int> get_random_empty_tile() {
+    int rand_row = rand() % (tilegrid_num_rows - 1);
+    int rand_col = rand() % (tilegrid_num_cols - 1);
+
+    std::pair<int, int> pair {rand_row, rand_col};
+
+    while (occupied_tiles.find(pair) != occupied_tiles.end()) {
+        rand_row = (rand_row + 1) % rand_row;
+
+        if (rand_row % 3 == 0)
+            rand_col = (rand_col + 1) % rand_col;
+
+        pair.first = rand_row;
+        pair.second = rand_col;
+    }
+
+    return pair;
+}
+
 int main() {
     al_init();
     al_install_keyboard();
     al_init_primitives_addon();
 
-    ALLEGRO_TIMER* timer { al_create_timer(ALLEGRO_BPS_TO_SECS(10.0))};
+    ALLEGRO_TIMER* timer { al_create_timer(ALLEGRO_BPS_TO_SECS(8.0))};
     ALLEGRO_EVENT_QUEUE* event_queue {al_create_event_queue()};
 
     al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
@@ -111,19 +163,22 @@ int main() {
 
     bool redraw {false};
     bool done {false};
+    bool should_grow {false};
+    bool food_eaten {false};
 
     ALLEGRO_EVENT event {};
     al_start_timer(timer);
-
-    int tilegrid_num_rows = DISP_HEIGHT / TILE_WIDTH;
-    int tilegrid_num_cols = DISP_WIDTH / TILE_WIDTH;
     
 
     Snake snake {Direction::east, 10, 10};
     snake.print();
 
+    Food food {5, 5};
+
+
     //draw_snake(snake);
     display_snake(snake, true);
+    display_food(food, true);
     draw_grid(tilegrid_num_rows, tilegrid_num_cols);
     al_flip_display();
 
@@ -148,6 +203,11 @@ int main() {
                 for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
                     key[i] &= KEY_SEEN;
 
+                if (is_collision(snake.get_head_r(), snake.get_head_c(), food.row, food.col)) {
+                    should_grow = true;
+                    food_eaten = true;
+                }
+
                 redraw = true;
                 break;
             case ALLEGRO_EVENT_KEY_DOWN:
@@ -167,8 +227,21 @@ int main() {
 
         if (redraw && al_event_queue_is_empty(event_queue)) {
             display_snake(snake, false);
-            snake.move();
 
+            if (should_grow) {
+                snake.grow();
+                should_grow = false;
+            }
+
+            if (food_eaten) {
+                display_food(food, false);
+                std::pair<int, int> rand_tile = get_random_empty_tile();
+                move_food(food, rand_tile.first, rand_tile.second);
+                food_eaten = false;
+            }
+            display_food(food, true);
+
+            snake.move();
             display_snake(snake, true);
 
             draw_grid(tilegrid_num_rows, tilegrid_num_cols);

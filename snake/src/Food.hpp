@@ -1,3 +1,4 @@
-class Food {
-    
+struct Food {
+    int row {};
+    int col {};
 };

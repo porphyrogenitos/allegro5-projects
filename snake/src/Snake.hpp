@@ -12,7 +12,7 @@ class Snake {
         int length {};
         int head_r {}; // Row position of head (in TileGrid)
         int head_c {}; // Column position of head (in TileGrid)
-        std::array<Direction, 100> direction_arr {};
+        std::array<Direction, 200> direction_arr {};
         
     public:
         /**
