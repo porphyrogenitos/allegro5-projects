@@ -17,7 +17,16 @@ const int KEY_RELEASED = 2;
 
 int tilegrid_num_rows = DISP_HEIGHT / TILE_WIDTH;
 int tilegrid_num_cols = DISP_WIDTH / TILE_WIDTH;
-//std::unordered_set<std::pair<int, int>> occupied_tiles;
+
+namespace std {
+    template<typename X, typename Y>
+    struct hash<std::pair<X, Y>> {
+        std::size_t operator()(const std::pair<X, Y> &pair) const {
+            return std::hash<X>()(pair.first) ^ std::hash<Y>()(pair.second);
+        }
+    };
+}
+std::unordered_set<Tile> occupied_tiles;
 
 
 void display_food(Food food, bool isVisible) {
@@ -104,8 +113,8 @@ void draw_grid(int num_rows, int num_cols) {
     }
 }
 
-std::pair<int, int> get_random_empty_tile() {
-    /*
+Tile get_random_empty_tile() {
+    
     int rand_row = rand() % (tilegrid_num_rows - 1);
     int rand_col = rand() % (tilegrid_num_cols - 1);
 
@@ -120,8 +129,7 @@ std::pair<int, int> get_random_empty_tile() {
         pair.first = rand_row;
         pair.second = rand_col;
     }
-    */
-    std::pair<int, int> pair {0, 0}; // Temporary
+
     return pair;
 }
 

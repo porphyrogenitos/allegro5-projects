@@ -21,6 +21,8 @@ class Snake {
          * @brief Construct a new Snake object
          * 
          * @param init_dir The initial direction of the snake.
+         * @param head_r The tile row
+         * @param head_c The tile column
          */
         Snake(Direction init_dir, int head_r, int head_c) {
             length = SNAKE_INIT_LEN;
