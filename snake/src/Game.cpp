@@ -28,6 +28,12 @@ namespace std {
 }
 std::unordered_set<Tile> occupied_tiles;
 
+void print_tileset(std::unordered_set<Tile> tiles) {
+    for (auto iter = tiles.begin(); iter != tiles.end(); ++iter) {
+		std::cout << "(" << std::to_string(iter->first) << "," << std::to_string(iter->second) << ") "; 
+    }
+    std::cout << std::endl;
+}
 
 void display_food(Food food, bool isVisible) {
     int x1 = food.col * TILE_WIDTH;
@@ -138,7 +144,7 @@ int main() {
     al_install_keyboard();
     al_init_primitives_addon();
 
-    ALLEGRO_TIMER* timer { al_create_timer(ALLEGRO_BPS_TO_SECS(8.0))};
+    ALLEGRO_TIMER* timer { al_create_timer(ALLEGRO_BPS_TO_SECS(1.0))};
     ALLEGRO_EVENT_QUEUE* event_queue {al_create_event_queue()};
 
     al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
@@ -168,6 +174,8 @@ int main() {
     snake.print();
 
     Food food {5, 5};
+    occupied_tiles.insert(Tile{food.row, food.col});
+    print_tileset(occupied_tiles);
 
 
     //draw_snake(snake);
@@ -228,15 +236,28 @@ int main() {
                 should_grow = false;
             }
 
-            if (food_eaten) {
+            // TODO: Might be good to move the following into a function move_snake(Snake snake).
+            for (int i = 0; i < snake.get_length(); i++) {
+                occupied_tiles.erase(snake.get_segment_position(i));
+            }
+            snake.move();
+            for (int i = 0; i < snake.get_length(); i++) {
+                occupied_tiles.insert(snake.get_segment_position(i));
+            }
+
+            if (food_eaten) { 
                 display_food(food, false);
+                Tile old_food_tile = Tile {food.row, food.col};
                 std::pair<int, int> rand_tile = get_random_empty_tile();
                 move_food(food, rand_tile.first, rand_tile.second);
+                occupied_tiles.erase(old_food_tile);
+                occupied_tiles.insert(rand_tile);
+
+                print_tileset(occupied_tiles);
+
                 food_eaten = false;
             }
             display_food(food, true);
-
-            snake.move();
             display_snake(snake, true);
 
             draw_grid(tilegrid_num_rows, tilegrid_num_cols);
