@@ -15,6 +15,12 @@ Tile Snake::get_segment_position(int index) const {
  * 
  */
 void Snake::move() {
+	// Erase old values of occupied_tiles
+    for (int i = 0; i < get_length(); i++) {
+        occupied_tiles.erase(get_segment_position(i));
+    }
+
+	// Move all body segments.
 	for (int i = length - 1; i > 0; i--) {
 		segments[i] = segments[i - 1];
 	}
@@ -38,6 +44,11 @@ void Snake::move() {
 	default:
 		break;
 	}
+
+	// Add all segments into occupied_tiles
+	for (int i = 0; i < get_length(); i++) {
+        occupied_tiles.insert(get_segment_position(i));
+    }
 }
 
 /**
@@ -67,6 +78,7 @@ void Snake::update_head_dir(Direction new_dir) {
  */
 void Snake::grow() {
 	length++;
+	segments[length - 1] = segments[length - 2];
 }
 
 /**

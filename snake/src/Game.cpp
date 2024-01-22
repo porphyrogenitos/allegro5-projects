@@ -18,15 +18,6 @@ const int KEY_RELEASED = 2;
 int tilegrid_num_rows = DISP_HEIGHT / TILE_WIDTH;
 int tilegrid_num_cols = DISP_WIDTH / TILE_WIDTH;
 
-namespace std {
-    template<typename X, typename Y>
-    struct hash<std::pair<X, Y>> {
-        std::size_t operator()(const std::pair<X, Y> &pair) const {
-            return std::hash<X>()(pair.first) ^ std::hash<Y>()(pair.second);
-        }
-    };
-}
-std::unordered_set<Tile> occupied_tiles;
 
 void print_tileset(std::unordered_set<Tile> tiles) {
     for (auto iter = tiles.begin(); iter != tiles.end(); ++iter) {
@@ -51,9 +42,13 @@ void display_food(Food food, bool isVisible) {
         al_draw_filled_circle(center_x, center_y, rad, al_map_rgb(0, 0, 0));
 }
 
-void move_food(Food& food, int row, int col) {
-    food.row = row;
-    food.col = col;
+void move_food(Food& food, Tile to_tile) {
+    food.row = to_tile.first;
+    food.col = to_tile.second;
+}
+
+void move_snake(Snake& snake) {
+    snake.move();
 }
 
 bool is_collision(int r1, int c1, int r2, int c2) {
@@ -119,14 +114,14 @@ void draw_grid(int num_rows, int num_cols) {
     }
 }
 
-Tile get_random_empty_tile() {
+Tile get_random_empty_tile(Snake snake) {
     
     int rand_row = rand() % (tilegrid_num_rows - 1);
     int rand_col = rand() % (tilegrid_num_cols - 1);
 
     std::pair<int, int> pair {rand_row, rand_col};
 
-    while (occupied_tiles.find(pair) != occupied_tiles.end()) {
+    while (snake.occupies_tile(pair)) {
         rand_row = (rand_row + 1) % rand_row;
 
         if (rand_row % 3 == 0)
@@ -144,7 +139,7 @@ int main() {
     al_install_keyboard();
     al_init_primitives_addon();
 
-    ALLEGRO_TIMER* timer { al_create_timer(ALLEGRO_BPS_TO_SECS(1.0))};
+    ALLEGRO_TIMER* timer { al_create_timer(ALLEGRO_BPS_TO_SECS(8.0))};
     ALLEGRO_EVENT_QUEUE* event_queue {al_create_event_queue()};
 
     al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
@@ -174,8 +169,6 @@ int main() {
     snake.print();
 
     Food food {5, 5};
-    occupied_tiles.insert(Tile{food.row, food.col});
-    print_tileset(occupied_tiles);
 
 
     //draw_snake(snake);
@@ -232,28 +225,15 @@ int main() {
 
             if (should_grow) {
                 snake.grow();
-                //snake.get
                 should_grow = false;
             }
 
-            // TODO: Might be good to move the following into a function move_snake(Snake snake).
-            for (int i = 0; i < snake.get_length(); i++) {
-                occupied_tiles.erase(snake.get_segment_position(i));
-            }
-            snake.move();
-            for (int i = 0; i < snake.get_length(); i++) {
-                occupied_tiles.insert(snake.get_segment_position(i));
-            }
+            move_snake(snake);
 
             if (food_eaten) { 
                 display_food(food, false);
-                Tile old_food_tile = Tile {food.row, food.col};
-                std::pair<int, int> rand_tile = get_random_empty_tile();
-                move_food(food, rand_tile.first, rand_tile.second);
-                occupied_tiles.erase(old_food_tile);
-                occupied_tiles.insert(rand_tile);
-
-                print_tileset(occupied_tiles);
+                std::pair<int, int> rand_tile = get_random_empty_tile(snake);
+                move_food(food, rand_tile);
 
                 food_eaten = false;
             }
