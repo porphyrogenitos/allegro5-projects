@@ -18,7 +18,6 @@ class Snake {
         std::array<Tile, 200> segments {}; // Tile positions of segments.
         std::unordered_set<Tile> occupied_tiles;
         
-        
     public:
         /**
          * @brief Construct a new Snake object

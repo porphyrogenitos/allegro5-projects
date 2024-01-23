@@ -134,6 +134,25 @@ Tile get_random_empty_tile(Snake snake) {
     return pair;
 }
 
+bool check_death(Snake snake) {
+
+	Tile head = snake.get_segment_position(0);
+	if (head.first < 0 || head.first >= tilegrid_num_rows
+		|| head.second < 0 || head.second >= tilegrid_num_cols) {
+\
+			return true;
+	}
+
+	for (int i = 1; i < snake.get_length(); i++) {
+		Tile segment = snake.get_segment_position(i);
+		if (head == segment) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 int main() {
     al_init();
     al_install_keyboard();
@@ -170,8 +189,6 @@ int main() {
 
     Food food {5, 5};
 
-
-    //draw_snake(snake);
     display_snake(snake, true);
     display_food(food, true);
     draw_grid(tilegrid_num_rows, tilegrid_num_cols);
@@ -241,6 +258,11 @@ int main() {
             display_snake(snake, true);
 
             draw_grid(tilegrid_num_rows, tilegrid_num_cols);
+
+            if (check_death(snake)) {
+                std::cout << "DIED." << std::endl;
+                break;
+            }
 
             al_flip_display();
             
