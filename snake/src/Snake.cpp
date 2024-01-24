@@ -1,5 +1,21 @@
 #include "Snake.hpp"
 
+Snake::Snake(Direction init_dir, int head_r, int head_c) {
+	length = SNAKE_INIT_LEN;
+	head_dir = init_dir;
+
+	Tile head_tile {head_r, head_c};
+	segments[0] = head_tile;
+	occupied_tiles.insert(head_tile);
+
+	for (int i = 1; i < length; i++) {
+		segments[i].first = segments[0].first;
+		segments[i].second = segments[i - 1].second - 1;
+
+		occupied_tiles.insert(Tile(segments[i].first, segments[i].second));
+	}
+}
+
 /**
  * @brief Returns the position of a Snake segment at index.
  * 

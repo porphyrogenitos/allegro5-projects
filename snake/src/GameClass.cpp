@@ -1,32 +1,27 @@
-#include <iostream>
-#include <utility>
-#include <unordered_set>
-#include <allegro5/allegro5.h>
-#include <allegro5/allegro_primitives.h>
-#include "Snake.cpp"
-#include "Direction.hpp"
-#include "Food.hpp"
+#include "GameClass.hpp"
+#include "GameHost.hpp"
 
+GameClass::GameClass(GameHost* gamehost) {
+    this->gamehost = gamehost;
+    timer = gamehost->get_timer_ptr();
+    display = gamehost->get_display_ptr();
+    event_queue = gamehost->get_event_queue_ptr();
+    event = gamehost->get_event_ptr();
+    key = gamehost->get_key_array();
+}
 
-const int DISP_WIDTH = 640;
-const int DISP_HEIGHT = 480;
-const int TILE_WIDTH = 20;
+GameClass::~GameClass() {
+    gamehost = nullptr;
+}
 
-const int KEY_SEEN = 1;
-const int KEY_RELEASED = 2;
-
-int tilegrid_num_rows = DISP_HEIGHT / TILE_WIDTH;
-int tilegrid_num_cols = DISP_WIDTH / TILE_WIDTH;
-
-
-void print_tileset(std::unordered_set<Tile> tiles) {
+void GameClass::print_tileset(std::unordered_set<Tile> tiles) {
     for (auto iter = tiles.begin(); iter != tiles.end(); ++iter) {
-		std::cout << "(" << std::to_string(iter->first) << "," << std::to_string(iter->second) << ") "; 
+        std::cout << "(" << std::to_string(iter->first) << "," << std::to_string(iter->second) << ") "; 
     }
     std::cout << std::endl;
 }
 
-void display_food(Food food, bool isVisible) {
+void GameClass::display_food(Food food, bool isVisible) {
     int x1 = food.col * TILE_WIDTH;
     int y1 = food.row * TILE_WIDTH;
     int x2 = (food.col + 1) * TILE_WIDTH;
@@ -42,21 +37,21 @@ void display_food(Food food, bool isVisible) {
         al_draw_filled_circle(center_x, center_y, rad, al_map_rgb(0, 0, 0));
 }
 
-void move_food(Food& food, Tile to_tile) {
+void GameClass::move_food(Food& food, Tile to_tile) {
     food.row = to_tile.first;
     food.col = to_tile.second;
 }
 
-void move_snake(Snake& snake) {
+void GameClass::move_snake(Snake& snake) {
     snake.move();
 }
 
-bool is_collision(int r1, int c1, int r2, int c2) {
+bool GameClass::is_collision(int r1, int c1, int r2, int c2) {
     return (r1 == r2) && (c1 == c2);
 }
 
 
-void display_snake(Snake snake, bool isVisible) {
+void GameClass::display_snake(Snake snake, bool isVisible) {
     int head_row = snake.get_head_tile().first;
     int head_col = snake.get_head_tile().second;
 
@@ -102,7 +97,7 @@ void display_snake(Snake snake, bool isVisible) {
  * @param num_rows 
  * @param num_cols 
  */
-void draw_grid(int num_rows, int num_cols) {
+void GameClass::draw_grid(int num_rows, int num_cols) {
     for (int row = 0; row < num_rows; row++) {
         int y = row * TILE_WIDTH;
         al_draw_line(0, y, DISP_WIDTH, y, al_map_rgb(255, 0, 0), 1.0);
@@ -114,7 +109,7 @@ void draw_grid(int num_rows, int num_cols) {
     }
 }
 
-Tile get_random_empty_tile(Snake snake) {
+Tile GameClass::get_random_empty_tile(Snake snake) {
     
     int rand_row = rand() % (tilegrid_num_rows - 1);
     int rand_col = rand() % (tilegrid_num_cols - 1);
@@ -134,44 +129,26 @@ Tile get_random_empty_tile(Snake snake) {
     return pair;
 }
 
-bool check_death(Snake snake) {
+bool GameClass::check_death(Snake snake) {
 
-	Tile head = snake.get_segment_position(0);
-	if (head.first < 0 || head.first >= tilegrid_num_rows
-		|| head.second < 0 || head.second >= tilegrid_num_cols) {
+    Tile head = snake.get_segment_position(0);
+    if (head.first < 0 || head.first >= tilegrid_num_rows
+        || head.second < 0 || head.second >= tilegrid_num_cols) {
 \
-			return true;
-	}
+            return true;
+    }
 
-	for (int i = 1; i < snake.get_length(); i++) {
-		Tile segment = snake.get_segment_position(i);
-		if (head == segment) {
-			return true;
-		}
-	}
+    for (int i = 1; i < snake.get_length(); i++) {
+        Tile segment = snake.get_segment_position(i);
+        if (head == segment) {
+            return true;
+        }
+    }
 
-	return false;
+    return false;
 }
 
-int main() {
-    al_init();
-    al_install_keyboard();
-    al_init_primitives_addon();
-
-    ALLEGRO_TIMER* timer { al_create_timer(ALLEGRO_BPS_TO_SECS(8.0))};
-    ALLEGRO_EVENT_QUEUE* event_queue {al_create_event_queue()};
-
-    al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
-    al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
-    ALLEGRO_DISPLAY* display = al_create_display(DISP_WIDTH, DISP_HEIGHT);
-
-    al_register_event_source(event_queue, al_get_keyboard_event_source());
-    al_register_event_source(event_queue, al_get_display_event_source(display));
-    al_register_event_source(event_queue, al_get_timer_event_source(timer));
-
-    unsigned char key[ALLEGRO_KEY_MAX];
-    memset(key, 0, sizeof(key));
-
+void GameClass::run() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     al_flip_display();
 
@@ -205,7 +182,7 @@ int main() {
                 else if(key[ALLEGRO_KEY_DOWN])
                     snake.update_head_dir(Direction::south);
                 else if(key[ALLEGRO_KEY_LEFT])
-                   snake.update_head_dir(Direction::west);
+                snake.update_head_dir(Direction::west);
                 else if(key[ALLEGRO_KEY_RIGHT])
                     snake.update_head_dir(Direction::east);
 
@@ -215,6 +192,7 @@ int main() {
                 for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
                     key[i] &= KEY_SEEN;
 
+                // Check if head has collided with food.
                 if (is_collision(snake.get_head_tile().first, snake.get_head_tile().second, food.row, food.col)) {
                     should_grow = true;
                     food_eaten = true;
@@ -269,7 +247,6 @@ int main() {
             redraw = false;
         }
     }
-    al_destroy_timer(timer);
-    al_destroy_display(display);
-    al_destroy_event_queue(event_queue);
+
+    gamehost->state_ended();
 }
