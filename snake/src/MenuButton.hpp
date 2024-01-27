@@ -6,7 +6,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 
-struct MenuItem {
+struct MenuButton {
 public:
     int x;
     int y;
@@ -17,8 +17,8 @@ public:
     ALLEGRO_FONT* font;
     std::function<void()> handler {};
 
-    MenuItem(int x, int y, int width, int height, std::string text, ALLEGRO_FONT* font);
-    MenuItem(std::string text, ALLEGRO_FONT* font);
+    MenuButton(int x, int y, int width, int height, std::string text, ALLEGRO_FONT* font);
+    MenuButton(std::string text, ALLEGRO_FONT* font);
 
 
     void draw();
