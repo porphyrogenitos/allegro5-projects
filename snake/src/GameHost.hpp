@@ -8,14 +8,11 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include "Constants.hpp"
+#include "State.hpp"
 
 class GameClass;
 
-enum class State {
-    MENU,
-    LEVEL,
-    GAME_OVER,
-};
+
 
 struct Player {
     int points {};

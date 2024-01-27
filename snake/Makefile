@@ -6,6 +6,7 @@ all:
 	src/GameHost.cpp \
 	src/Snake.cpp \
 	src/Constants.cpp \
+	src/State.cpp \
 	src/Direction.cpp \
 	-g -o game -lallegro_primitives -lallegro_ttf -lallegro_font -lallegro -Wno-return-type
 

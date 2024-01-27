@@ -58,21 +58,30 @@ unsigned char* GameHost::get_key_array() {
 void GameHost::run() {
     GameClass game {this};
     Menu menu {this, 0, 0, DISP_WIDTH, DISP_HEIGHT};
-    switch(state) {
-        case State::GAME_OVER:
-            // TODO
-            break;
-        case State::LEVEL:
-            game.run();
-            break;
-        case State::MENU:
-            menu.run();
-            break;
+
+    // TODO: This isn't working properly.
+    while (true) {
+        switch(state) {
+            case State::GAME_OVER:
+                // TODO
+                break;
+            case State::LEVEL:
+                game.run();
+                break;
+            case State::MENU:
+                menu.run();
+                break;
+        }
     }
 }
 
+//TODO: This is being called, but it isn't updating to the screen for some reason.
 void GameHost::change_state(State next_state) {
+    std::cout << "Change state to " << state_to_string(next_state) << "!" << std::endl;
 
+    // TODO: Probably put a switch block in here to stop anything currently running.
+
+    state = next_state;
 }
 
 void GameHost::state_ended() {

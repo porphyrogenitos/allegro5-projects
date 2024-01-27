@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <functional>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include "Constants.hpp"

@@ -1,9 +1,5 @@
 #include "Menu.hpp"
 
-void handler1() {
-    std::cout << "Button1 clicked." << std::endl;
-}
-
 void handler2() {
     std::cout << "Button2 clicked." << std::endl;
 }
@@ -21,7 +17,8 @@ Menu::Menu(GameHost* gamehost, int x, int y, int width, int height) {
 
     menu_buttons[hovered_item].hovering = true;
 
-    menu_buttons[0].handler = &handler1;
+    auto f = std::bind(&GameHost::change_state, gamehost, State::LEVEL);
+    menu_buttons[0].handler = f;
     menu_buttons[1].handler = &handler2;
 }
 
