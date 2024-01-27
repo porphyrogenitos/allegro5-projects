@@ -10,9 +10,6 @@
 #include "Direction.hpp"
 #include "Food.hpp"
 
-//TODO: Continue making GameClass.hpp and GameHost.hpp files. Then make sure
-//each #includes the other.
-
 class GameHost;
 
 class GameClass {

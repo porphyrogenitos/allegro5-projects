@@ -6,7 +6,6 @@ GameClass::GameClass(GameHost* gamehost) {
     timer = gamehost->get_timer_ptr();
     display = gamehost->get_display_ptr();
     event_queue = gamehost->get_event_queue_ptr();
-    event = gamehost->get_event_ptr();
     key = gamehost->get_key_array();
 }
 

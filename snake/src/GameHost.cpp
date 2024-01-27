@@ -1,5 +1,6 @@
 #include "GameHost.hpp"
 #include "GameClass.hpp"
+#include "Menu.hpp"
 
 GameHost::GameHost() {
     init();
@@ -9,6 +10,8 @@ void GameHost::init() {
     al_init();
     al_install_keyboard();
     al_init_primitives_addon();
+    al_init_font_addon();
+    al_init_ttf_addon();
 
     timer = al_create_timer(ALLEGRO_BPS_TO_SECS(8.0));
     event_queue = al_create_event_queue();
@@ -23,7 +26,7 @@ void GameHost::init() {
 
     memset(key, 0, sizeof(key));
 
-    state = State::LEVEL;
+    state = State::MENU;
 }
 
 void GameHost::deinit() {
@@ -54,6 +57,7 @@ unsigned char* GameHost::get_key_array() {
 
 void GameHost::run() {
     GameClass game {this};
+    Menu menu {this, 0, 0, DISP_WIDTH, DISP_HEIGHT};
     switch(state) {
         case State::GAME_OVER:
             // TODO
@@ -62,7 +66,7 @@ void GameHost::run() {
             game.run();
             break;
         case State::MENU:
-            // TODO
+            menu.run();
             break;
     }
 }
