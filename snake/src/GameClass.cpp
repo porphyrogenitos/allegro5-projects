@@ -147,7 +147,7 @@ bool GameClass::check_death(Snake snake) {
     return false;
 }
 
-void GameClass::run() {
+void GameClass::loop() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     al_flip_display();
 

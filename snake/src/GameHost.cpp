@@ -25,8 +25,6 @@ void GameHost::init() {
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
 
     memset(key, 0, sizeof(key));
-
-    state = State::MENU;
 }
 
 void GameHost::deinit() {
@@ -65,8 +63,8 @@ void GameHost::run() {
             case State::GAME_OVER:
                 // TODO
                 break;
-            case State::LEVEL:
-                game.run();
+            case State::PLAY:
+                game.loop();
                 break;
             case State::MENU:
                 menu.run();
@@ -82,6 +80,7 @@ void GameHost::change_state(State next_state) {
     // TODO: Probably put a switch block in here to stop anything currently running.
 
     state = next_state;
+    run();
 }
 
 void GameHost::state_ended() {
@@ -91,7 +90,7 @@ void GameHost::state_ended() {
         /* code */
         break;
 
-    case State::LEVEL:
+    case State::PLAY:
         std::cout << "Level ended." << std::endl;
         break;
 

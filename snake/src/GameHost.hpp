@@ -8,6 +8,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include "Constants.hpp"
+#include "StateManager.hpp"
 #include "State.hpp"
 
 class GameClass;
@@ -28,7 +29,7 @@ private:
     ALLEGRO_EVENT_QUEUE* event_queue;
     ALLEGRO_DISPLAY* display;
     ALLEGRO_EVENT event {};
-    State state;
+    StateManager state_manager {State::MENU};
     Player player1;
 
     unsigned char key[ALLEGRO_KEY_MAX];

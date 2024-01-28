@@ -17,7 +17,7 @@ Menu::Menu(GameHost* gamehost, int x, int y, int width, int height) {
 
     menu_buttons[hovered_item].hovering = true;
 
-    auto f = std::bind(&GameHost::change_state, gamehost, State::LEVEL);
+    auto f = std::bind(&GameHost::change_state, gamehost, State::PLAY);
     menu_buttons[0].handler = f;
     menu_buttons[1].handler = &handler2;
 }

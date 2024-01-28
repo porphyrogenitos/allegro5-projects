@@ -44,5 +44,5 @@ public:
 
     ~GameClass();
 
-    void run();
+    void loop();
 };

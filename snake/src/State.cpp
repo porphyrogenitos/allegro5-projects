@@ -6,8 +6,8 @@ std::string state_to_string(State state) {
     case State::GAME_OVER:
         return "GAME_OVER";
 
-    case State::LEVEL:
-        return "LEVEL";
+    case State::PLAY:
+        return "PLAY";
     
     case State::MENU:
         return "MENU";

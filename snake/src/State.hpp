@@ -2,7 +2,8 @@
 
 enum class State {
     MENU,
-    LEVEL,
+    PLAY,
+    PAUSED,
     GAME_OVER,
 };
 
