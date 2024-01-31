@@ -5,7 +5,6 @@ PlayState::PlayState(GameHost* gamehost) : State(gamehost) {
 }
 
 void PlayState::tick() {
-    std::cout << "PlayState tick!" << std::endl;
     gameclass->tick();
     
 }
