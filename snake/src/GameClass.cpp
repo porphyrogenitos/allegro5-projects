@@ -7,6 +7,7 @@ GameClass::GameClass(GameHost* gamehost) {
     display = gamehost->get_display_ptr();
     event_queue = gamehost->get_event_queue_ptr();
     key = gamehost->get_key_array();
+
 }
 
 GameClass::~GameClass() {
@@ -147,105 +148,37 @@ bool GameClass::check_death(Snake snake) {
     return false;
 }
 
-void GameClass::loop() {
-    al_clear_to_color(al_map_rgb(0, 0, 0));
-    al_flip_display();
+void GameClass::tick() {
+    if(key[ALLEGRO_KEY_UP])
+        snake.update_head_dir(Direction::north);
+    else if(key[ALLEGRO_KEY_DOWN])
+        snake.update_head_dir(Direction::south);
+    else if(key[ALLEGRO_KEY_LEFT])
+    snake.update_head_dir(Direction::west);
+    else if(key[ALLEGRO_KEY_RIGHT])
+        snake.update_head_dir(Direction::east);
 
-    bool redraw {false};
-    bool done {false};
-    bool should_grow {false};
-    bool food_eaten {false};
-
-    ALLEGRO_EVENT event {};
-    al_start_timer(timer);
-    
-
-    Snake snake {Direction::east, 10, 10};
-    snake.print();
-
-    Food food {5, 5};
-
-    display_snake(snake, true);
-    display_food(food, true);
-    draw_grid(tilegrid_num_rows, tilegrid_num_cols);
-    al_flip_display();
-
-
-    while (true) {
-        al_wait_for_event(event_queue, &event);
-
-        switch(event.type) {
-            case ALLEGRO_EVENT_TIMER:
-                if(key[ALLEGRO_KEY_UP])
-                    snake.update_head_dir(Direction::north);
-                else if(key[ALLEGRO_KEY_DOWN])
-                    snake.update_head_dir(Direction::south);
-                else if(key[ALLEGRO_KEY_LEFT])
-                snake.update_head_dir(Direction::west);
-                else if(key[ALLEGRO_KEY_RIGHT])
-                    snake.update_head_dir(Direction::east);
-
-                if(key[ALLEGRO_KEY_ESCAPE])
-                    done = true;
-
-                for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
-                    key[i] &= KEY_SEEN;
-
-                // Check if head has collided with food.
-                if (is_collision(snake.get_head_tile().first, snake.get_head_tile().second, food.row, food.col)) {
-                    should_grow = true;
-                    food_eaten = true;
-                }
-
-                redraw = true;
-                break;
-            case ALLEGRO_EVENT_KEY_DOWN:
-                key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
-                break;
-
-            case ALLEGRO_EVENT_KEY_UP:
-                key[event.keyboard.keycode] &= KEY_RELEASED;
-                break;
-            case ALLEGRO_EVENT_DISPLAY_CLOSE:
-                done = true;
-                break;
-        }
-
-        if (done)
-            break;
-
-        if (redraw && al_event_queue_is_empty(event_queue)) {
-            display_snake(snake, false);
-
-            if (should_grow) {
-                snake.grow();
-                should_grow = false;
-            }
-
-            move_snake(snake);
-
-            if (food_eaten) { 
-                display_food(food, false);
-                std::pair<int, int> rand_tile = get_random_empty_tile(snake);
-                move_food(food, rand_tile);
-
-                food_eaten = false;
-            }
-            display_food(food, true);
-            display_snake(snake, true);
-
-            draw_grid(tilegrid_num_rows, tilegrid_num_cols);
-
-            if (check_death(snake)) {
-                std::cout << "DIED." << std::endl;
-                break;
-            }
-
-            al_flip_display();
+    if(key[ALLEGRO_KEY_ESCAPE])
+        done = true;
             
-            redraw = false;
-        }
+    // Check if head has collided with food.
+    if (is_collision(snake.get_head_tile().first, snake.get_head_tile().second, food.row, food.col)) {
+        snake.grow();
+
+        std::pair<int, int> rand_tile = get_random_empty_tile(snake);
+        move_food(food, rand_tile);
     }
 
-    gamehost->state_ended();
+    snake.move();
+
+    // TODO: Right spot for this check?
+    if (check_death(snake)) {
+        std::cout << "DIED." << std::endl;
+    }
+}
+
+void GameClass::draw() {
+    display_food(food, true);
+    display_snake(snake, true);
+    // draw_grid(tilegrid_num_rows, tilegrid_num_cols); 
 }

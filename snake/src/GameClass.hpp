@@ -21,6 +21,14 @@ private:
     unsigned char* key;
     GameHost* gamehost;
 
+    bool redraw {false};
+    bool done {false};
+    bool should_grow {false};
+    bool food_eaten {false};
+
+    Snake snake {Direction::east, 10, 10};
+    Food food {5, 5};
+
     void print_tileset(std::unordered_set<Tile> tiles);
 
     void display_food(Food food, bool isVisible);
@@ -45,4 +53,8 @@ public:
     ~GameClass();
 
     void loop();
+
+    void tick();
+
+    void draw();
 };

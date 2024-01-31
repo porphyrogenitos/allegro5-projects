@@ -1,6 +1,8 @@
 #include "GameHost.hpp"
 #include "GameClass.hpp"
-#include "Menu.hpp"
+//#include "Menu.hpp"
+#include "StateFactory.hpp"
+#include "states/State.hpp"
 
 GameHost::GameHost() {
     init();
@@ -12,6 +14,11 @@ void GameHost::init() {
     al_init_primitives_addon();
     al_init_font_addon();
     al_init_ttf_addon();
+
+    state_factory = std::make_shared<StateFactory>();
+    play_state = state_factory->create(StateEnum::PLAY, this);
+    //menu_state = state_factory->create(StateEnum::MENU);
+    curr_state = play_state;
 
     timer = al_create_timer(ALLEGRO_BPS_TO_SECS(8.0));
     event_queue = al_create_event_queue();
@@ -25,6 +32,37 @@ void GameHost::init() {
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
 
     memset(key, 0, sizeof(key));
+
+    bool redraw = false;
+
+    al_start_timer(timer);
+
+    while (true) {
+        al_wait_for_event(event_queue, &event);
+
+        switch(event.type) {
+            case ALLEGRO_EVENT_TIMER:
+                for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
+                    key[i] &= KEY_SEEN;
+                tick();
+                redraw = true;
+                break;
+            case ALLEGRO_EVENT_KEY_DOWN:
+                key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
+                break;
+
+            case ALLEGRO_EVENT_KEY_UP:
+                key[event.keyboard.keycode] &= KEY_RELEASED;
+                break;
+        }
+
+        if (redraw && al_event_queue_is_empty(event_queue)) {
+            al_clear_to_color(al_map_rgb(0, 0, 0));
+            draw();
+            al_flip_display();
+            redraw = false;
+        }
+    }
 }
 
 void GameHost::deinit() {
@@ -54,50 +92,13 @@ unsigned char* GameHost::get_key_array() {
 }
 
 void GameHost::run() {
-    GameClass game {this};
-    Menu menu {this, 0, 0, DISP_WIDTH, DISP_HEIGHT};
 
-    // TODO: This isn't working properly.
-    while (true) {
-        switch(state) {
-            case State::GAME_OVER:
-                // TODO
-                break;
-            case State::PLAY:
-                game.loop();
-                break;
-            case State::MENU:
-                menu.run();
-                break;
-        }
-    }
 }
 
-//TODO: This is being called, but it isn't updating to the screen for some reason.
-void GameHost::change_state(State next_state) {
-    std::cout << "Change state to " << state_to_string(next_state) << "!" << std::endl;
-
-    // TODO: Probably put a switch block in here to stop anything currently running.
-
-    state = next_state;
-    run();
+void GameHost::tick() {
+    curr_state->tick();
 }
 
-void GameHost::state_ended() {
-    switch (state)
-    {
-    case State::GAME_OVER:
-        /* code */
-        break;
-
-    case State::PLAY:
-        std::cout << "Level ended." << std::endl;
-        break;
-
-    case State::MENU:
-        break;
-    
-    default:
-        break;
-    }
+void GameHost::draw() {
+    curr_state->draw();
 }

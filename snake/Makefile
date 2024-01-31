@@ -1,14 +1,24 @@
+CPPFLAGS=-std=c++17 -Wno-return-type -g
+
 all:
-	g++ src/Main.cpp \
-	src/GameClass.cpp \
-	src/Menu.cpp \
-	src/MenuButton.cpp \
-	src/GameHost.cpp \
+	g++ src/GameClass.cpp \
 	src/Snake.cpp \
 	src/Constants.cpp \
-	src/State.cpp \
 	src/Direction.cpp \
-	-g -o game -lallegro_primitives -lallegro_ttf -lallegro_font -lallegro -Wno-return-type
+	src/GameHost.cpp \
+	src/StateFactory.cpp \
+	src/states/State.cpp \
+	src/states/PlayState.cpp \
+	src/Main.cpp -g -o game -lallegro_primitives -lallegro_ttf -lallegro_font -lallegro -Wno-return-type
 
 test:
 	./game
+
+game: Main.c
+	g++ $(CPPFLAGS) -o game Main.c
+
+Main.o: GameHost.o
+	g++ $(CPPFLAGS) -c GameHost.o -o Main.o
+
+GameHost.o:
+	g++ $(CPPFLAGS) -c 

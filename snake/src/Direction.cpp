@@ -25,5 +25,7 @@ Direction get_opposite_dir(Direction direction) {
             return Direction::west;
         case Direction::west:
             return Direction::east;
+        default:
+            return direction;
     }
 }

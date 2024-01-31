@@ -3,16 +3,16 @@
 #include <iostream>
 #include <utility>
 #include <unordered_set>
+#include <memory>
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include "Constants.hpp"
-#include "StateManager.hpp"
-#include "State.hpp"
 
 class GameClass;
-
+class State;
+class StateFactory;
 
 
 struct Player {
@@ -29,7 +29,12 @@ private:
     ALLEGRO_EVENT_QUEUE* event_queue;
     ALLEGRO_DISPLAY* display;
     ALLEGRO_EVENT event {};
-    StateManager state_manager {State::MENU};
+    
+    std::shared_ptr<StateFactory> state_factory;
+    std::shared_ptr<State> play_state;
+    //std::shared_ptr<State> menu_state = state_factory->create(StateEnum::MENU);
+    std::shared_ptr<State> curr_state;
+
     Player player1;
 
     unsigned char key[ALLEGRO_KEY_MAX];
@@ -50,10 +55,9 @@ public:
 
     unsigned char* get_key_array();
 
+    void tick();
+
     void run();
 
-    void change_state(State next_state);
-
-    void state_ended();
-
+    void draw();
 };
