@@ -5,8 +5,9 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include "Constants.hpp"
-#include "GameHost.hpp"
 #include "MenuButton.hpp"
+
+class GameHost;
 
 class Menu {
 
@@ -39,7 +40,6 @@ public:
     ~Menu();
 
     void resize_menu_buttons();
+    void tick();
     void draw();
-    void run();
-
 };

@@ -3,6 +3,7 @@
 //#include "Menu.hpp"
 #include "StateFactory.hpp"
 #include "states/State.hpp"
+#include "states/MenuState.hpp"
 
 GameHost::GameHost() {
     init();
@@ -17,8 +18,8 @@ void GameHost::init() {
 
     state_factory = std::make_shared<StateFactory>();
     play_state = state_factory->create(StateEnum::PLAY, this);
-    //menu_state = state_factory->create(StateEnum::MENU);
-    curr_state = play_state;
+    menu_state = state_factory->create(StateEnum::MENU, this);
+    curr_state = menu_state;
 
     timer = al_create_timer(ALLEGRO_BPS_TO_SECS(8.0));
     event_queue = al_create_event_queue();

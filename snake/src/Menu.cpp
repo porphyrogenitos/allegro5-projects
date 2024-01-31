@@ -1,4 +1,5 @@
 #include "Menu.hpp"
+#include "GameHost.hpp"
 
 void handler2() {
     std::cout << "Button2 clicked." << std::endl;
@@ -15,10 +16,12 @@ Menu::Menu(GameHost* gamehost, int x, int y, int width, int height) {
     event_queue = gamehost->get_event_queue_ptr();
     key = gamehost->get_key_array();
 
+    resize_menu_buttons();
     menu_buttons[hovered_item].hovering = true;
 
-    auto f = std::bind(&GameHost::change_state, gamehost, State::PLAY);
-    menu_buttons[0].handler = f;
+
+    //auto f = std::bind(&GameHost::change_state, gamehost, StateEnum::PLAY);
+    //menu_buttons[0].handler = f;
     menu_buttons[1].handler = &handler2;
 }
 
@@ -59,52 +62,17 @@ void Menu::draw() {
         button.draw();
 }
 
-
-void Menu::run() {
-    resize_menu_buttons();
-
-    ALLEGRO_EVENT event {};
-    bool redraw {false};
-    al_start_timer(timer);
-
-    while(true) {
-        al_wait_for_event(event_queue, &event);
-        switch(event.type) {
-            case ALLEGRO_EVENT_TIMER:
-                if (key[ALLEGRO_KEY_ENTER])
-                    menu_buttons[hovered_item].select();
-                if (key[ALLEGRO_KEY_DOWN]) {
-                    menu_buttons[hovered_item].hovering = false;
-                    hovered_item = (hovered_item + 1) % menu_buttons.size();
-                    menu_buttons[hovered_item].hovering = true;
-                }
-                if (key[ALLEGRO_KEY_UP]) {
-                    menu_buttons[hovered_item].hovering = false;
-                    hovered_item = (hovered_item - 1) % menu_buttons.size();
-                    menu_buttons[hovered_item].hovering = true;
-                }
-
-                    for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
-                        key[i] &= KEY_SEEN;
-
-                    redraw = true;
-
-                    break;
-            case ALLEGRO_EVENT_KEY_DOWN:
-                key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
-                break;
-
-            case ALLEGRO_EVENT_KEY_UP:
-                key[event.keyboard.keycode] &= KEY_RELEASED;
-                break;
-        }
-      
-
-        if (redraw && al_event_queue_is_empty(event_queue)) {
-            al_clear_to_color(al_map_rgb(0, 0, 0));
-            draw();
-            al_flip_display();
-            redraw = false;
-        }
+void Menu::tick() {
+    if (key[ALLEGRO_KEY_ENTER])
+        menu_buttons[hovered_item].select();
+    if (key[ALLEGRO_KEY_DOWN]) {
+        menu_buttons[hovered_item].hovering = false;
+        hovered_item = (hovered_item + 1) % menu_buttons.size();
+        menu_buttons[hovered_item].hovering = true;
+    }
+    if (key[ALLEGRO_KEY_UP]) {
+        menu_buttons[hovered_item].hovering = false;
+        hovered_item = (hovered_item - 1) % menu_buttons.size();
+        menu_buttons[hovered_item].hovering = true;
     }
 }

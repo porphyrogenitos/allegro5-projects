@@ -9,6 +9,9 @@ all:
 	src/StateFactory.cpp \
 	src/states/State.cpp \
 	src/states/PlayState.cpp \
+	src/states/MenuState.cpp \
+	src/Menu.cpp \
+	src/MenuButton.cpp \
 	src/Main.cpp -g -o game -lallegro_primitives -lallegro_ttf -lallegro_font -lallegro -Wno-return-type
 
 test:

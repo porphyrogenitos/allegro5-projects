@@ -2,7 +2,7 @@
 
 #include <memory>
 #include "states/State.hpp"
-//#include "states/MenuState.hpp"
+#include "states/MenuState.hpp"
 #include "states/PlayState.hpp"
 
 class GameHost;

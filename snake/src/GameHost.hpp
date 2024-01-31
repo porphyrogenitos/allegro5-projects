@@ -32,7 +32,7 @@ private:
     
     std::shared_ptr<StateFactory> state_factory;
     std::shared_ptr<State> play_state;
-    //std::shared_ptr<State> menu_state = state_factory->create(StateEnum::MENU);
+    std::shared_ptr<State> menu_state;
     std::shared_ptr<State> curr_state;
 
     Player player1;

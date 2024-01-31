@@ -174,6 +174,9 @@ void GameClass::tick() {
     // TODO: Right spot for this check?
     if (check_death(snake)) {
         std::cout << "DIED." << std::endl;
+
+        //TODO: Game over. Perhaps have a GameOverState and pass it
+        //a screencap.
     }
 }
 
