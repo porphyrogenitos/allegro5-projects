@@ -9,10 +9,12 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include "Constants.hpp"
+#include "Platform.hpp"
 
 class GameClass;
 class State;
 class StateFactory;
+class StateManager;
 
 
 struct Player {
@@ -31,13 +33,13 @@ private:
     ALLEGRO_EVENT event {};
     
     std::shared_ptr<StateFactory> state_factory;
-    std::shared_ptr<State> play_state;
-    std::shared_ptr<State> menu_state;
+    std::shared_ptr<StateManager> state_manager;
     std::shared_ptr<State> curr_state;
 
-    Player player1;
+    std::unique_ptr<Platform> platform;
 
-    unsigned char key[ALLEGRO_KEY_MAX];
+
+    Player player1;
 
     void init();
 
@@ -45,19 +47,7 @@ private:
 public:
     GameHost();
 
-    ALLEGRO_EVENT* get_event_ptr();
-
-    ALLEGRO_DISPLAY* get_display_ptr();
-
-    ALLEGRO_TIMER* get_timer_ptr();
-
-    ALLEGRO_EVENT_QUEUE* get_event_queue_ptr();
-
-    unsigned char* get_key_array();
-
     void tick();
-
-    void run();
 
     void draw();
 };

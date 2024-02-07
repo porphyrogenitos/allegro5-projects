@@ -5,6 +5,7 @@
 #include <unordered_set>
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_primitives.h>
+#include "Platform.hpp"
 #include "Constants.hpp"
 #include "Snake.hpp"
 #include "Direction.hpp"
@@ -14,12 +15,7 @@ class GameHost;
 
 class GameClass {
 private:
-    ALLEGRO_TIMER* timer;
-    ALLEGRO_EVENT_QUEUE* event_queue;
-    ALLEGRO_DISPLAY* display;
-    ALLEGRO_EVENT* event {};
-    unsigned char* key;
-    GameHost* gamehost;
+    Platform* platform;
 
     bool redraw {false};
     bool done {false};
@@ -48,7 +44,7 @@ private:
     bool check_death(Snake snake);
 
 public:
-    GameClass(GameHost* gamehost);
+    GameClass(Platform* platform);
 
     ~GameClass();
 

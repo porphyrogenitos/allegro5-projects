@@ -16,3 +16,7 @@ void KeyboardManager::key_pressed(int keycode) {
 void KeyboardManager::key_released(int keycode) {
     key[keycode] &= KEY_RELEASED;
 }
+
+bool KeyboardManager::key_was_pressed(int keycode) {
+    return key[keycode];
+}

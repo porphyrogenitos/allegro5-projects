@@ -1,18 +1,10 @@
 #include "GameClass.hpp"
-#include "GameHost.hpp"
 
-GameClass::GameClass(GameHost* gamehost) {
-    this->gamehost = gamehost;
-    timer = gamehost->get_timer_ptr();
-    display = gamehost->get_display_ptr();
-    event_queue = gamehost->get_event_queue_ptr();
-    key = gamehost->get_key_array();
-
+GameClass::GameClass(Platform* platform) {
+    this->platform = platform;
 }
 
-GameClass::~GameClass() {
-    gamehost = nullptr;
-}
+GameClass::~GameClass() {}
 
 void GameClass::print_tileset(std::unordered_set<Tile> tiles) {
     for (auto iter = tiles.begin(); iter != tiles.end(); ++iter) {
@@ -149,16 +141,16 @@ bool GameClass::check_death(Snake snake) {
 }
 
 void GameClass::tick() {
-    if(key[ALLEGRO_KEY_UP])
+    if(platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_UP))
         snake.update_head_dir(Direction::north);
-    else if(key[ALLEGRO_KEY_DOWN])
+    else if(platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_DOWN))
         snake.update_head_dir(Direction::south);
-    else if(key[ALLEGRO_KEY_LEFT])
+    else if(platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_LEFT))
     snake.update_head_dir(Direction::west);
-    else if(key[ALLEGRO_KEY_RIGHT])
+    else if(platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_RIGHT))
         snake.update_head_dir(Direction::east);
 
-    if(key[ALLEGRO_KEY_ESCAPE])
+    if(platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_ESCAPE))
         done = true;
             
     // Check if head has collided with food.

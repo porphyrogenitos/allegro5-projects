@@ -2,16 +2,18 @@ CPPFLAGS=-std=c++17 -Wno-return-type -g
 
 all:
 	g++ src/GameClass.cpp \
+	src/StateManager.cpp \
+	src/StateFactory.cpp \
 	src/Snake.cpp \
 	src/Constants.cpp \
 	src/Direction.cpp \
-	src/GameHost.cpp \
-	src/StateFactory.cpp \
 	src/states/State.cpp \
 	src/states/PlayState.cpp \
 	src/states/MenuState.cpp \
+	src/GameHost.cpp \
 	src/Menu.cpp \
 	src/MenuButton.cpp \
+	src/KeyboardManager.cpp \
 	src/Main.cpp -g -o game -lallegro_primitives -lallegro_ttf -lallegro_font -lallegro -Wno-return-type
 
 test:

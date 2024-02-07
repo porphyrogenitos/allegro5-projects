@@ -1,36 +1,32 @@
 #include "Menu.hpp"
-#include "GameHost.hpp"
 
-void handler2() {
-    std::cout << "Button2 clicked." << std::endl;
-}
-
-Menu::Menu(GameHost* gamehost, int x, int y, int width, int height) {
-    this->gamehost = gamehost;
+Menu::Menu(Platform* platform, int x, int y, int width, int height) {
+    this->platform = platform;
     this->x = x;
     this->y = y;
     this->width = width;
     this->height = height;
-    timer = gamehost->get_timer_ptr();
-    display = gamehost->get_display_ptr();
-    event_queue = gamehost->get_event_queue_ptr();
-    key = gamehost->get_key_array();
 
+    // TODO: Change MenuButton array to std::vector and then remove these two lines.
     resize_menu_buttons();
     menu_buttons[hovered_item].hovering = true;
-
-
-    //auto f = std::bind(&GameHost::change_state, gamehost, StateEnum::PLAY);
-    //menu_buttons[0].handler = f;
-    menu_buttons[1].handler = &handler2;
 }
 
 Menu::~Menu() {
     al_destroy_font(font);
 }
 
+void Menu::add_button(std::string text, std::function<void()> handler) {
+    //TODO
+
+    resize_menu_buttons();
+}
+
 //TODO: Get even spacing between menu items.
 void Menu::resize_menu_buttons() {
+    if (menu_buttons.size() == 0)
+        return;
+    
     int num_items = menu_buttons.size();
     int lr_padding = 20; //left and right padding
     int vert_padding = 20; //vertical padding from menu border
@@ -63,14 +59,14 @@ void Menu::draw() {
 }
 
 void Menu::tick() {
-    if (key[ALLEGRO_KEY_ENTER])
+    if (platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_ENTER))
         menu_buttons[hovered_item].select();
-    if (key[ALLEGRO_KEY_DOWN]) {
+    if (platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_DOWN)) {
         menu_buttons[hovered_item].hovering = false;
         hovered_item = (hovered_item + 1) % menu_buttons.size();
         menu_buttons[hovered_item].hovering = true;
     }
-    if (key[ALLEGRO_KEY_UP]) {
+    if (platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_UP)) {
         menu_buttons[hovered_item].hovering = false;
         hovered_item = (hovered_item - 1) % menu_buttons.size();
         menu_buttons[hovered_item].hovering = true;

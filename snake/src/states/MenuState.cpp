@@ -1,8 +1,8 @@
 #include "MenuState.hpp"
-#include "../GameHost.hpp"
+#include "../Constants.hpp"
 
-MenuState::MenuState(GameHost* gamehost) : State(gamehost) {
-    menu = std::make_unique<Menu>(gamehost, 0, 0, DISP_WIDTH, DISP_HEIGHT);
+MenuState::MenuState(StateEnum curr_state, Platform* platform) : State(curr_state, platform) {
+    menu = std::make_unique<Menu>(this->platform, 0, 0, DISP_WIDTH, DISP_HEIGHT);
 }
 
 void MenuState::tick() {
@@ -11,4 +11,10 @@ void MenuState::tick() {
 
 void MenuState::draw() {
     menu->draw();
+}
+
+// Handler for Menu
+// "Play" button handler would be set to MenuState::set_next_state(StateEnum::PLAY).
+void MenuState::set_next_state(StateEnum next_state) {
+    this->next_state = next_state;
 }

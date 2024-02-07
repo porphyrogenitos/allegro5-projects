@@ -1,9 +1,10 @@
 #include "GameHost.hpp"
 #include "GameClass.hpp"
-//#include "Menu.hpp"
 #include "StateFactory.hpp"
 #include "states/State.hpp"
 #include "states/MenuState.hpp"
+#include "StateManager.hpp"
+
 
 GameHost::GameHost() {
     init();
@@ -16,10 +17,10 @@ void GameHost::init() {
     al_init_font_addon();
     al_init_ttf_addon();
 
+    platform = std::make_unique<Platform>();
+
     state_factory = std::make_shared<StateFactory>();
-    play_state = state_factory->create(StateEnum::PLAY, this);
-    menu_state = state_factory->create(StateEnum::MENU, this);
-    curr_state = menu_state;
+    state_manager = std::make_shared<StateManager>(StateEnum::MENU, platform.get(), state_factory);
 
     timer = al_create_timer(ALLEGRO_BPS_TO_SECS(8.0));
     event_queue = al_create_event_queue();
@@ -32,8 +33,6 @@ void GameHost::init() {
     al_register_event_source(event_queue, al_get_display_event_source(display));
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
 
-    memset(key, 0, sizeof(key));
-
     bool redraw = false;
 
     al_start_timer(timer);
@@ -43,17 +42,15 @@ void GameHost::init() {
 
         switch(event.type) {
             case ALLEGRO_EVENT_TIMER:
-                for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
-                    key[i] &= KEY_SEEN;
                 tick();
                 redraw = true;
                 break;
             case ALLEGRO_EVENT_KEY_DOWN:
-                key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
+                platform->keyboard_man.key_pressed(event.keyboard.keycode);
                 break;
 
             case ALLEGRO_EVENT_KEY_UP:
-                key[event.keyboard.keycode] &= KEY_RELEASED;
+                platform->keyboard_man.key_released(event.keyboard.keycode);
                 break;
         }
 
@@ -72,34 +69,11 @@ void GameHost::deinit() {
     al_destroy_event_queue(event_queue);
 }
 
-ALLEGRO_EVENT* GameHost::get_event_ptr() {
-    return &event;
-}
-
-ALLEGRO_DISPLAY* GameHost::get_display_ptr() {
-    return display;
-}
-
-ALLEGRO_TIMER* GameHost::get_timer_ptr() {
-    return timer;
-}
-
-ALLEGRO_EVENT_QUEUE* GameHost::get_event_queue_ptr() {
-    return event_queue;
-}
-
-unsigned char* GameHost::get_key_array() {
-    return key;
-}
-
-void GameHost::run() {
-
-}
-
 void GameHost::tick() {
-    curr_state->tick();
+    platform->keyboard_man.tick();
+    state_manager->get_curr_state()->tick();
 }
 
 void GameHost::draw() {
-    curr_state->draw();
+    state_manager->get_curr_state()->draw();
 }

@@ -6,8 +6,7 @@
 #include <allegro5/allegro_ttf.h>
 #include "Constants.hpp"
 #include "MenuButton.hpp"
-
-class GameHost;
+#include "Platform.hpp"
 
 class Menu {
 
@@ -21,11 +20,7 @@ private:
     int width;
     int height;
     int font_size = 25; //TODO: We might not want to hardcode this
-    ALLEGRO_TIMER* timer;
-    ALLEGRO_EVENT_QUEUE* event_queue;
-    ALLEGRO_DISPLAY* display;
-    unsigned char* key;
-    GameHost* gamehost;
+    Platform* platform;
     ALLEGRO_FONT* font {al_load_ttf_font("assets/Consolas.ttf", font_size, 0)};
     ALLEGRO_COLOR background {al_map_rgb(1, 50, 32)}; // Dark green
 
@@ -36,9 +31,10 @@ private:
     int hovered_item = 0;
 
 public:
-    Menu(GameHost* gamehost, int x, int y, int width, int height);
+    Menu(Platform* platform, int x, int y, int width, int height);
     ~Menu();
 
+    void add_button(std::string text, std::function<void()> handler);
     void resize_menu_buttons();
     void tick();
     void draw();
