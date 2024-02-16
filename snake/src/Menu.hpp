@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <vector>
 #include <functional>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
@@ -24,10 +25,13 @@ private:
     ALLEGRO_FONT* font {al_load_ttf_font("assets/Consolas.ttf", font_size, 0)};
     ALLEGRO_COLOR background {al_map_rgb(1, 50, 32)}; // Dark green
 
-    std::array<MenuButton, 4> menu_buttons = {MenuButton {"PLAY", font},
+    std::vector<MenuButton> menu_buttons;
+    
+    /* = {MenuButton {"PLAY", font},
                             MenuButton {"CONTROLS", font},
                             MenuButton {"ABOUT", font},
                             MenuButton {"Do Not Click", font}};
+    */
     int hovered_item = 0;
 
 public:

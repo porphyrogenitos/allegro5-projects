@@ -22,7 +22,7 @@ void GameHost::init() {
     state_factory = std::make_shared<StateFactory>();
     state_manager = std::make_shared<StateManager>(StateEnum::MENU, platform.get(), state_factory);
 
-    timer = al_create_timer(ALLEGRO_BPS_TO_SECS(8.0));
+    timer = al_create_timer(ALLEGRO_BPS_TO_SECS(10.0));
     event_queue = al_create_event_queue();
 
     al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
@@ -71,6 +71,7 @@ void GameHost::deinit() {
 
 void GameHost::tick() {
     platform->keyboard_man.tick();
+    state_manager->update_state();
     state_manager->get_curr_state()->tick();
 }
 

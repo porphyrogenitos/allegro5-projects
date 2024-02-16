@@ -13,4 +13,5 @@ public:
     void tick();
     void draw();
     void set_next_state(StateEnum st_enum);
+    //void MenuState::set_state_to_play();
 };

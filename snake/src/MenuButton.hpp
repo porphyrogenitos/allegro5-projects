@@ -19,6 +19,7 @@ public:
 
     MenuButton(int x, int y, int width, int height, std::string text, ALLEGRO_FONT* font);
     MenuButton(std::string text, ALLEGRO_FONT* font);
+    MenuButton(std::string text, ALLEGRO_FONT* font, std::function<void()> handler);
 
 
     void draw();

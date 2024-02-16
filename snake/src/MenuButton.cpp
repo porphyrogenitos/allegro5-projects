@@ -15,6 +15,12 @@ MenuButton::MenuButton(int x, int y, int width, int height, std::string text, AL
 MenuButton::MenuButton(std::string text, ALLEGRO_FONT* font) : 
     MenuButton(0, 0, 0, 0, text, font) {}
 
+MenuButton::MenuButton(std::string text, ALLEGRO_FONT* font, std::function<void()> handler) : 
+    MenuButton(0, 0, 0, 0, text, font) {
+
+        this->handler = handler;
+}
+
 //Draws white text against a black rectangle when unhovered, and the reverse when hovered.
 void MenuButton::draw() {
 

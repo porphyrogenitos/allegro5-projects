@@ -10,3 +10,7 @@ State::State(StateEnum curr_state, Platform* platform) {
 StateEnum State::get_next_state() {
     return next_state;
 }
+
+StateEnum State::get_id() {
+    return curr_state;
+}

@@ -6,10 +6,6 @@ Menu::Menu(Platform* platform, int x, int y, int width, int height) {
     this->y = y;
     this->width = width;
     this->height = height;
-
-    // TODO: Change MenuButton array to std::vector and then remove these two lines.
-    resize_menu_buttons();
-    menu_buttons[hovered_item].hovering = true;
 }
 
 Menu::~Menu() {
@@ -18,6 +14,11 @@ Menu::~Menu() {
 
 void Menu::add_button(std::string text, std::function<void()> handler) {
     //TODO
+    menu_buttons.push_back(MenuButton {text, font, handler});
+
+    if (menu_buttons.size() == 1) {
+        menu_buttons[0].hovering = true;
+    }
 
     resize_menu_buttons();
 }

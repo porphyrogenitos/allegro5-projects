@@ -4,6 +4,7 @@
 #include <memory>
 #include "../Platform.hpp"
 
+// TODO: Change to "StateID"
 enum class StateEnum {
     MENU,
     PLAY,
@@ -22,5 +23,6 @@ public:
     virtual void tick() = 0;
     virtual void draw() = 0;
     StateEnum get_next_state();
+    StateEnum get_id();
     virtual ~State() = default;
 };

@@ -18,4 +18,6 @@ public:
     void set_state(StateEnum next_state);
 
     std::shared_ptr<State> get_curr_state();
+
+    void update_state();
 };

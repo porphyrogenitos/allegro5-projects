@@ -8,10 +8,19 @@ StateManager::StateManager(StateEnum initial_state, Platform* platform, std::sha
 }
 
 void StateManager::set_state(StateEnum next_state){
+    if (curr_state->get_id() == next_state)
+        return;
+    
     curr_state.reset();
     curr_state = state_factory->create(next_state, this->platform);
 }
 
 std::shared_ptr<State> StateManager::get_curr_state(){
     return curr_state;
+}
+
+void StateManager::update_state() {
+    if (curr_state->get_next_state() != curr_state->get_id()) {
+        set_state(curr_state->get_next_state());
+    }
 }
