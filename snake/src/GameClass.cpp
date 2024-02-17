@@ -1,7 +1,8 @@
 #include "GameClass.hpp"
 
-GameClass::GameClass(Platform* platform) {
+GameClass::GameClass(Platform* platform, std::function<void()> handler) {
     this->platform = platform;
+    this->exit_handler = handler;
 }
 
 GameClass::~GameClass() {}
@@ -151,7 +152,7 @@ void GameClass::tick() {
         snake.update_head_dir(Direction::east);
 
     if(platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_ESCAPE))
-        done = true;
+        exit_handler();
             
     // Check if head has collided with food.
     if (is_collision(snake.get_head_tile().first, snake.get_head_tile().second, food.row, food.col)) {
@@ -166,6 +167,7 @@ void GameClass::tick() {
     // TODO: Right spot for this check?
     if (check_death(snake)) {
         std::cout << "DIED." << std::endl;
+        exit_handler();
 
         //TODO: Game over. Perhaps have a GameOverState and pass it
         //a screencap.

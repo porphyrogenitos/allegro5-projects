@@ -3,6 +3,7 @@
 #include <iostream>
 #include <utility>
 #include <unordered_set>
+#include <functional>
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_primitives.h>
 #include "Platform.hpp"
@@ -16,6 +17,7 @@ class GameHost;
 class GameClass {
 private:
     Platform* platform;
+    std::function<void()> exit_handler;
 
     bool redraw {false};
     bool done {false};
@@ -44,7 +46,7 @@ private:
     bool check_death(Snake snake);
 
 public:
-    GameClass(Platform* platform);
+    GameClass(Platform* platform, std::function<void()> exit_handler);
 
     ~GameClass();
 

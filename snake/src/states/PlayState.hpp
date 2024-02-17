@@ -13,5 +13,5 @@ public:
     PlayState(StateEnum curr_state, Platform* platform);
     void tick();
     void draw();
-
+    void set_next_state(StateEnum next_state);
 };
