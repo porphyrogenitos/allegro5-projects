@@ -5,7 +5,7 @@
 #include "../Platform.hpp"
 
 // TODO: Change to "StateID"
-enum class StateEnum {
+enum class StateID {
     MENU,
     PLAY,
     GAME_OVER,
@@ -14,15 +14,15 @@ enum class StateEnum {
 //TODO: Is "Scene" a more appropriate word than "State"?
 class State {
 protected:
-    StateEnum curr_state;
-    StateEnum next_state;
+    StateID curr_state;
+    StateID next_state;
     Platform* platform;
 
 public:
-    State(StateEnum curr_state, Platform* platform);
+    State(StateID curr_state, Platform* platform);
     virtual void tick() = 0;
     virtual void draw() = 0;
-    StateEnum get_next_state();
-    StateEnum get_id();
+    StateID get_next_state();
+    StateID get_id();
     virtual ~State() = default;
 };

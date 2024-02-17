@@ -1,6 +1,6 @@
 #include "GameOverState.hpp"
 
-GameOverState::GameOverState(StateEnum curr_state, Platform* platform) : State(curr_state, platform) {
+GameOverState::GameOverState(StateID curr_state, Platform* platform) : State(curr_state, platform) {
 
 } 
 

@@ -13,9 +13,9 @@ private:
     std::shared_ptr<StateFactory> state_factory;
 
 public:
-    StateManager(StateEnum initial_state, Platform* platform, std::shared_ptr<StateFactory> state_factory);
+    StateManager(StateID initial_state, Platform* platform, std::shared_ptr<StateFactory> state_factory);
 
-    void set_state(StateEnum next_state);
+    void set_state(StateID next_state);
 
     std::shared_ptr<State> get_curr_state();
 
