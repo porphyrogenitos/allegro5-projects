@@ -18,6 +18,7 @@ class GameClass {
 private:
     Platform* platform;
     std::function<void()> exit_handler;
+    std::function<void()> game_over_handler;
 
     bool redraw {false};
     bool done {false};
@@ -46,7 +47,7 @@ private:
     bool check_death(Snake snake);
 
 public:
-    GameClass(Platform* platform, std::function<void()> exit_handler);
+    GameClass(Platform* platform, std::function<void()> exit_handler, std::function<void()> game_over_handler);
 
     ~GameClass();
 

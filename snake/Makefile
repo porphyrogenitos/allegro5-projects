@@ -10,6 +10,7 @@ all:
 	src/states/State.cpp \
 	src/states/PlayState.cpp \
 	src/states/MenuState.cpp \
+	src/states/GameOverState.cpp \
 	src/GameHost.cpp \
 	src/Menu.cpp \
 	src/MenuButton.cpp \

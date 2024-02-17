@@ -1,8 +1,9 @@
 #include "GameClass.hpp"
 
-GameClass::GameClass(Platform* platform, std::function<void()> handler) {
+GameClass::GameClass(Platform* platform, std::function<void()> exit_handler, std::function<void()> game_over_handler) {
     this->platform = platform;
-    this->exit_handler = handler;
+    this->exit_handler = exit_handler;
+    this->game_over_handler = game_over_handler;
 }
 
 GameClass::~GameClass() {}
@@ -167,10 +168,9 @@ void GameClass::tick() {
     // TODO: Right spot for this check?
     if (check_death(snake)) {
         std::cout << "DIED." << std::endl;
-        exit_handler();
 
-        //TODO: Game over. Perhaps have a GameOverState and pass it
-        //a screencap.
+        //TODO: Perhaps pass screencap to the state.
+        game_over_handler();
     }
 }
 

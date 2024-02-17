@@ -5,6 +5,7 @@
 #include "states/State.hpp"
 #include "states/MenuState.hpp"
 #include "states/PlayState.hpp"
+#include "states/GameOverState.hpp"
 
 class StateManager;
 
