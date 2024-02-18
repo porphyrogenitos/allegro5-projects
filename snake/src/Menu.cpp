@@ -12,6 +12,10 @@ Menu::~Menu() {
     al_destroy_font(font);
 }
 
+void Menu::set_background_transparent(bool set) {
+    is_transparent = set;
+}
+
 void Menu::add_button(std::string text, std::function<void()> handler) {
     //TODO
     menu_buttons.push_back(MenuButton {text, font, handler});
@@ -53,7 +57,8 @@ void Menu::resize_menu_buttons() {
 }
 
 void Menu::draw() {
-    al_draw_filled_rectangle(x, y, width, height, background);
+    if (!is_transparent)
+        al_draw_filled_rectangle(x, y, width, height, background);
 
     for (MenuButton button : menu_buttons)
         button.draw();

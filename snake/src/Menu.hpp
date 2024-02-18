@@ -11,8 +11,7 @@
 
 class Menu {
 
-    //TODO: Figuring out how MenuButton should relate to Menu.
-    // I want it to automatically calculate the layout of 3 menu buttons based on
+    //TODO: I want it to automatically calculate the layout of 3 menu buttons based on
     // a string array with three slots for text.
 
 private:
@@ -23,7 +22,8 @@ private:
     int font_size = 25; //TODO: We might not want to hardcode this
     Platform* platform;
     ALLEGRO_FONT* font {al_load_ttf_font("assets/Consolas.ttf", font_size, 0)};
-    ALLEGRO_COLOR background {al_map_rgb(1, 50, 32)}; // Dark green
+    ALLEGRO_COLOR background {al_map_rgba(1, 50, 32, 0)}; // Dark green
+    bool is_transparent {false};
 
     std::vector<MenuButton> menu_buttons;
     
@@ -38,6 +38,7 @@ public:
     Menu(Platform* platform, int x, int y, int width, int height);
     ~Menu();
 
+    void set_background_transparent(bool set);
     void add_button(std::string text, std::function<void()> handler);
     void resize_menu_buttons();
     void tick();
