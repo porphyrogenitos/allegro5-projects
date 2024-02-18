@@ -11,6 +11,6 @@ class StateManager;
 
 class StateFactory {
 public:
-    virtual std::shared_ptr<State> create(StateID st_enum, Platform* platform);
+    virtual std::unique_ptr<State> create(StateID st_enum, Platform* platform);
     virtual ~StateFactory() = default;
 };

@@ -19,8 +19,8 @@ void GameHost::init() {
 
     platform = std::make_unique<Platform>();
 
-    state_factory = std::make_shared<StateFactory>();
-    state_manager = std::make_shared<StateManager>(StateID::MENU, platform.get(), state_factory);
+    state_factory = std::make_unique<StateFactory>();
+    state_manager = std::make_unique<StateManager>(StateID::MENU, platform.get(), state_factory.get());
 
     timer = al_create_timer(ALLEGRO_BPS_TO_SECS(10.0));
     event_queue = al_create_event_queue();
