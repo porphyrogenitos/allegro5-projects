@@ -17,7 +17,6 @@ void Menu::set_background_transparent(bool set) {
 }
 
 void Menu::add_button(std::string text, std::function<void()> handler) {
-    //TODO
     menu_buttons.push_back(MenuButton {text, font, handler});
 
     if (menu_buttons.size() == 1) {

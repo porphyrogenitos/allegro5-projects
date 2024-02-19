@@ -52,6 +52,14 @@ void GameHost::init() {
             case ALLEGRO_EVENT_KEY_UP:
                 platform->keyboard_man.key_released(event.keyboard.keycode);
                 break;
+
+            case ALLEGRO_EVENT_DISPLAY_CLOSE:
+                platform->exit = true;
+        }
+
+        if (platform->exit) {
+            deinit();
+            break;
         }
 
         if (redraw && al_event_queue_is_empty(event_queue)) {

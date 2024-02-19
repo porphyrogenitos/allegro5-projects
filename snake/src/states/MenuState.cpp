@@ -10,6 +10,7 @@ MenuState::MenuState(StateID curr_state, Platform* platform) : State(curr_state,
     menu->add_button("PLAY", std::bind(&MenuState::set_next_state, this, StateID::PLAY));
     //menu->add_button("CONTROLS", ...);
     //menu->add_button("ABOUT", ...);
+    //menu->add_button("EXIT", ...);
 
 }
 

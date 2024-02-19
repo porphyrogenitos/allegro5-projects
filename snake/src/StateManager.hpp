@@ -4,8 +4,6 @@
 
 class StateFactory;
 
-//TODO: Did you add to Makefile?
-
 class StateManager {
 private:
     std::unique_ptr<State> curr_state;
