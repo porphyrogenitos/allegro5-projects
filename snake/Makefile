@@ -13,7 +13,7 @@ all:
 	src/states/GameOverState.cpp \
 	src/GameHost.cpp \
 	src/Menu.cpp \
-	src/MenuButton.cpp \
+	src/Button.cpp \
 	src/Label.cpp \
 	src/KeyboardManager.cpp \
 	src/Main.cpp -g -o game -lallegro_primitives -lallegro_ttf -lallegro_font -lallegro -Wno-return-type

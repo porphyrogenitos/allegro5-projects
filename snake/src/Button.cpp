@@ -1,7 +1,7 @@
-#include "MenuButton.hpp"
+#include "Button.hpp"
 
 // Constructor
-MenuButton::MenuButton(int x, int y, int width, int height, std::string text, ALLEGRO_FONT* font) {
+Button::Button(int x, int y, int width, int height, std::string text, ALLEGRO_FONT* font) {
     this->x = x;
     this->y = y;
     this->width = width;
@@ -12,17 +12,17 @@ MenuButton::MenuButton(int x, int y, int width, int height, std::string text, AL
 }
 
 // Constructor
-MenuButton::MenuButton(std::string text, ALLEGRO_FONT* font) : 
-    MenuButton(0, 0, 0, 0, text, font) {}
+Button::Button(std::string text, ALLEGRO_FONT* font) : 
+    Button(0, 0, 0, 0, text, font) {}
 
-MenuButton::MenuButton(std::string text, ALLEGRO_FONT* font, std::function<void()> handler) : 
-    MenuButton(0, 0, 0, 0, text, font) {
+Button::Button(std::string text, ALLEGRO_FONT* font, std::function<void()> handler) : 
+    Button(0, 0, 0, 0, text, font) {
 
         this->handler = handler;
 }
 
 //Draws white text against a black rectangle when unhovered, and the reverse when hovered.
-void MenuButton::draw() {
+void Button::draw() {
 
         ALLEGRO_COLOR text_color = al_map_rgb(255, 255, 255);
         ALLEGRO_COLOR background_color = al_map_rgb(50, 50, 50);
@@ -36,16 +36,16 @@ void MenuButton::draw() {
     al_draw_text(font, text_color, get_center_x(), get_center_y(), ALLEGRO_ALIGN_CENTRE, text.c_str());
 }
 
-void MenuButton::select() {
+void Button::select() {
     handler();
 }
 
-// Gets the center x-coordinate of the MenuButton.
-int MenuButton::get_center_x() {
+// Gets the center x-coordinate of the Button.
+int Button::get_center_x() {
     return x + (width / 2);
 }
 
-// Gets the center y-coordinate of the MenuButton.
-int MenuButton::get_center_y() {
+// Gets the center y-coordinate of the Button.
+int Button::get_center_y() {
     return y + (height / 2) - (al_get_font_line_height(font) / 2);
 }

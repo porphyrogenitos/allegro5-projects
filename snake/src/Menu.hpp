@@ -6,7 +6,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include "Constants.hpp"
-#include "MenuButton.hpp"
+#include "Button.hpp"
 #include "Platform.hpp"
 
 class Menu {
@@ -25,7 +25,7 @@ private:
     ALLEGRO_COLOR background {al_map_rgba(1, 50, 32, 0)}; // Dark green
     bool is_transparent {false};
 
-    std::vector<MenuButton> menu_buttons;
+    std::vector<Button> menu_buttons;
     
     /* = {MenuButton {"PLAY", font},
                             MenuButton {"CONTROLS", font},

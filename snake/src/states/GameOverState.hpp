@@ -7,7 +7,7 @@
 #include "../Platform.hpp"
 #include "State.hpp"
 #include "../Platform.hpp"
-#include "../MenuButton.hpp"
+#include "../Button.hpp"
 #include "../Label.hpp"
 
 class GameOverState : public State {

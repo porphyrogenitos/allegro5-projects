@@ -17,7 +17,7 @@ void Menu::set_background_transparent(bool set) {
 }
 
 void Menu::add_button(std::string text, std::function<void()> handler) {
-    menu_buttons.push_back(MenuButton {text, font, handler});
+    menu_buttons.push_back(Button {text, font, handler});
 
     if (menu_buttons.size() == 1) {
         menu_buttons[0].hovering = true;
@@ -59,7 +59,7 @@ void Menu::draw() {
     if (!is_transparent)
         al_draw_filled_rectangle(x, y, width, height, background);
 
-    for (MenuButton button : menu_buttons)
+    for (Button button : menu_buttons)
         button.draw();
 }
 
