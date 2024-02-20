@@ -7,16 +7,16 @@
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_primitives.h>
 #include "Platform.hpp"
+#include "GameData.hpp"
 #include "Constants.hpp"
 #include "Snake.hpp"
 #include "Direction.hpp"
 #include "Food.hpp"
 
-class GameHost;
-
 class GameClass {
 private:
     Platform* platform;
+    GameData* game_data;
     std::function<void()> exit_handler;
     std::function<void()> game_over_handler;
 
@@ -47,7 +47,7 @@ private:
     bool check_death(Snake snake);
 
 public:
-    GameClass(Platform* platform, std::function<void()> exit_handler, std::function<void()> game_over_handler);
+    GameClass(Platform* platform, GameData* gamed_data, std::function<void()> exit_handler, std::function<void()> game_over_handler);
 
     ~GameClass();
 

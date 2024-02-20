@@ -1,7 +1,8 @@
 #include "GameClass.hpp"
 
-GameClass::GameClass(Platform* platform, std::function<void()> exit_handler, std::function<void()> game_over_handler) {
+GameClass::GameClass(Platform* platform, GameData* game_data, std::function<void()> exit_handler, std::function<void()> game_over_handler) {
     this->platform = platform;
+    this->game_data = game_data;
     this->exit_handler = exit_handler;
     this->game_over_handler = game_over_handler;
 }
@@ -46,23 +47,8 @@ bool GameClass::is_collision(int r1, int c1, int r2, int c2) {
 
 
 void GameClass::display_snake(Snake snake, bool isVisible) {
-    int head_row = snake.get_head_tile().first;
-    int head_col = snake.get_head_tile().second;
-
-    // Draw head.
-    int head_x1 = head_col * TILE_WIDTH;
-    int head_y1 = head_row * TILE_WIDTH;
-    int head_x2 = (head_col + 1) * TILE_WIDTH;
-    int head_y2 = (head_row + 1) * TILE_WIDTH;
-
-    int center_x = (head_x1 + head_x2) / 2;
-    int center_y = (head_y1 + head_y2) / 2;
     float rad = TILE_WIDTH / 2;
-    if (isVisible)
-        al_draw_filled_circle(center_x, center_y, rad, al_map_rgb(255, 0, 0)); // Red head
-    else
-        al_draw_filled_circle(center_x, center_y, rad, al_map_rgb(0, 0, 0));
-
+    
     ALLEGRO_COLOR body_color = al_map_rgb(0, 255, 0); // Green
     if (!isVisible)
         body_color = al_map_rgb(0, 0, 0); // Black (not visible)
@@ -83,6 +69,22 @@ void GameClass::display_snake(Snake snake, bool isVisible) {
 
         al_draw_filled_circle(center_x, center_y, rad, body_color);
     }
+
+    int head_row = snake.get_head_tile().first;
+    int head_col = snake.get_head_tile().second;
+
+    // Draw head.
+    int head_x1 = head_col * TILE_WIDTH;
+    int head_y1 = head_row * TILE_WIDTH;
+    int head_x2 = (head_col + 1) * TILE_WIDTH;
+    int head_y2 = (head_row + 1) * TILE_WIDTH;
+
+    int center_x = (head_x1 + head_x2) / 2;
+    int center_y = (head_y1 + head_y2) / 2;
+    if (isVisible)
+        al_draw_filled_circle(center_x, center_y, rad, al_map_rgb(255, 0, 0)); // Red head
+    else
+        al_draw_filled_circle(center_x, center_y, rad, al_map_rgb(0, 0, 0));
 }
 
 /**
@@ -158,6 +160,7 @@ void GameClass::tick() {
             
     // Check if head has collided with food.
     if (is_collision(snake.get_head_tile().first, snake.get_head_tile().second, food.row, food.col)) {
+        game_data->current_score++;
         snake.grow();
 
         std::pair<int, int> rand_tile = get_random_empty_tile(snake);
