@@ -10,6 +10,7 @@
 #include <allegro5/allegro_ttf.h>
 #include "Constants.hpp"
 #include "Platform.hpp"
+#include "GameData.hpp"
 
 class GameClass;
 class State;
@@ -23,7 +24,6 @@ struct Player {
 
 // TODO: This is going to host (i.e. be the container for) levels and menus.
 // Game.cpp should be converted to a class that can be instantiated here.
-// GameHost can also keep track of players.
 
 class GameHost {
 private:
@@ -37,6 +37,7 @@ private:
     std::shared_ptr<State> curr_state;
 
     std::unique_ptr<Platform> platform;
+    std::unique_ptr<GameData> game_data;
 
 
     Player player1;

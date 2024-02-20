@@ -3,7 +3,7 @@
 #include "../Constants.hpp"
 
 
-MenuState::MenuState(StateID curr_state, Platform* platform) : State(curr_state, platform) {
+MenuState::MenuState(StateID curr_state, Platform* platform, GameData* game_data) : State(curr_state, platform, game_data) {
     menu = std::make_unique<ButtonGroup>(this->platform, 0, 0, DISP_WIDTH, DISP_HEIGHT);
 
 

@@ -18,9 +18,10 @@ void GameHost::init() {
     al_init_ttf_addon();
 
     platform = std::make_unique<Platform>();
+    game_data = std::make_unique<GameData>();
 
     state_factory = std::make_unique<StateFactory>();
-    state_manager = std::make_unique<StateManager>(StateID::MENU, platform.get(), state_factory.get());
+    state_manager = std::make_unique<StateManager>(StateID::MENU, platform.get(), game_data.get(), state_factory.get());
 
     timer = al_create_timer(ALLEGRO_BPS_TO_SECS(10.0));
     event_queue = al_create_event_queue();

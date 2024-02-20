@@ -10,7 +10,7 @@ class PlayState : public State {
 private:
     std::unique_ptr<GameClass> gameclass;
 public:
-    PlayState(StateID curr_state, Platform* platform);
+    PlayState(StateID curr_state, Platform* platform, GameData* game_data);
     void tick();
     void draw();
     void set_next_state(StateID next_state);

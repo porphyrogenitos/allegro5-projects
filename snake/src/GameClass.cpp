@@ -153,6 +153,7 @@ void GameClass::tick() {
         snake.update_head_dir(Direction::east);
 
     if(platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_ESCAPE))
+        //TODO: Rename to handle_escape()
         exit_handler();
             
     // Check if head has collided with food.
@@ -170,6 +171,7 @@ void GameClass::tick() {
         std::cout << "DIED." << std::endl;
 
         //TODO: Perhaps pass screencap to the state.
+        //TODO: Rename to handle_death()
         game_over_handler();
     }
 }

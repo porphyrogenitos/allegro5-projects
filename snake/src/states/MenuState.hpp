@@ -4,12 +4,13 @@
 #include <memory>
 #include "State.hpp"
 #include "../Platform.hpp"
+#include "../GameData.hpp"
 #include "../ButtonGroup.hpp"
 
 class MenuState : public State{
     std::unique_ptr<ButtonGroup> menu;
 public:
-    MenuState(StateID curr_state, Platform* platform);
+    MenuState(StateID curr_state, Platform* platform, GameData* game_data);
     void tick();
     void draw();
     void set_next_state(StateID st_enum);

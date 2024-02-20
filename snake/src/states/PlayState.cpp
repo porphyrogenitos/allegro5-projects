@@ -1,6 +1,6 @@
 #include "PlayState.hpp"
 
-PlayState::PlayState(StateID curr_state, Platform* platform) : State(curr_state, platform) {
+PlayState::PlayState(StateID curr_state, Platform* platform, GameData* game_data) : State(curr_state, platform, game_data) {
 
     // Right now I'm passing all handler functions via constructor args. This is obviously not very good.
     // TODO: Might be good to replace with Observer pattern.

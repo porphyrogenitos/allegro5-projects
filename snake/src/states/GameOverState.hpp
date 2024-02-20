@@ -7,6 +7,7 @@
 #include "../Platform.hpp"
 #include "State.hpp"
 #include "../Platform.hpp"
+#include "../GameData.hpp"
 #include "../Button.hpp"
 #include "../Label.hpp"
 
@@ -24,7 +25,7 @@ private:
                 al_map_rgb(255, 255, 255), 
                 font};
 public:
-    GameOverState(StateID curr_state, Platform* platform);
+    GameOverState(StateID curr_state, Platform* platform, GameData* game_data);
     void tick();
     void draw();
 };
