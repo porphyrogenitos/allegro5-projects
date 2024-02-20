@@ -12,7 +12,7 @@ all:
 	src/states/MenuState.cpp \
 	src/states/GameOverState.cpp \
 	src/GameHost.cpp \
-	src/Menu.cpp \
+	src/ButtonGroup.cpp \
 	src/Button.cpp \
 	src/Label.cpp \
 	src/KeyboardManager.cpp \

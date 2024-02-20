@@ -1,6 +1,6 @@
-#include "Menu.hpp"
+#include "ButtonGroup.hpp"
 
-Menu::Menu(Platform* platform, int x, int y, int width, int height) {
+ButtonGroup::ButtonGroup(Platform* platform, int x, int y, int width, int height) {
     this->platform = platform;
     this->x = x;
     this->y = y;
@@ -8,15 +8,15 @@ Menu::Menu(Platform* platform, int x, int y, int width, int height) {
     this->height = height;
 }
 
-Menu::~Menu() {
+ButtonGroup::~ButtonGroup() {
     al_destroy_font(font);
 }
 
-void Menu::set_background_transparent(bool set) {
+void ButtonGroup::set_background_transparent(bool set) {
     is_transparent = set;
 }
 
-void Menu::add_button(std::string text, std::function<void()> handler) {
+void ButtonGroup::add_button(std::string text, std::function<void()> handler) {
     menu_buttons.push_back(Button {text, font, handler});
 
     if (menu_buttons.size() == 1) {
@@ -26,8 +26,8 @@ void Menu::add_button(std::string text, std::function<void()> handler) {
     resize_menu_buttons();
 }
 
-//TODO: Get even spacing between menu items.
-void Menu::resize_menu_buttons() {
+//TODO: Get even spacing between buttons.
+void ButtonGroup::resize_menu_buttons() {
     if (menu_buttons.size() == 0)
         return;
     
@@ -55,7 +55,7 @@ void Menu::resize_menu_buttons() {
     }
 }
 
-void Menu::draw() {
+void ButtonGroup::draw() {
     if (!is_transparent)
         al_draw_filled_rectangle(x, y, width, height, background);
 
@@ -63,7 +63,7 @@ void Menu::draw() {
         button.draw();
 }
 
-void Menu::tick() {
+void ButtonGroup::tick() {
     if (platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_ENTER))
         menu_buttons[hovered_item].select();
     if (platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_DOWN)) {

@@ -9,9 +9,9 @@
 #include "Button.hpp"
 #include "Platform.hpp"
 
-class Menu {
+class ButtonGroup {
 
-    //TODO: I want it to automatically calculate the layout of 3 menu buttons based on
+    //TODO: I want it to automatically calculate the layout of 3 buttons based on
     // a string array with three slots for text.
 
 private:
@@ -27,16 +27,16 @@ private:
 
     std::vector<Button> menu_buttons;
     
-    /* = {MenuButton {"PLAY", font},
-                            MenuButton {"CONTROLS", font},
-                            MenuButton {"ABOUT", font},
-                            MenuButton {"Do Not Click", font}};
+    /* = {Button {"PLAY", font},
+                            Button {"CONTROLS", font},
+                            Button {"ABOUT", font},
+                            Button {"Do Not Click", font}};
     */
     int hovered_item = 0;
 
 public:
-    Menu(Platform* platform, int x, int y, int width, int height);
-    ~Menu();
+    ButtonGroup(Platform* platform, int x, int y, int width, int height);
+    ~ButtonGroup();
 
     void set_background_transparent(bool set);
     void add_button(std::string text, std::function<void()> handler);

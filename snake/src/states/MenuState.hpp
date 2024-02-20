@@ -4,10 +4,10 @@
 #include <memory>
 #include "State.hpp"
 #include "../Platform.hpp"
-#include "../Menu.hpp"
+#include "../ButtonGroup.hpp"
 
 class MenuState : public State{
-    std::unique_ptr<Menu> menu;
+    std::unique_ptr<ButtonGroup> menu;
 public:
     MenuState(StateID curr_state, Platform* platform);
     void tick();

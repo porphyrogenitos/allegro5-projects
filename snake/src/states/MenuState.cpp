@@ -4,7 +4,7 @@
 
 
 MenuState::MenuState(StateID curr_state, Platform* platform) : State(curr_state, platform) {
-    menu = std::make_unique<Menu>(this->platform, 0, 0, DISP_WIDTH, DISP_HEIGHT);
+    menu = std::make_unique<ButtonGroup>(this->platform, 0, 0, DISP_WIDTH, DISP_HEIGHT);
 
 
     menu->add_button("PLAY", std::bind(&MenuState::set_next_state, this, StateID::PLAY));
@@ -22,7 +22,7 @@ void MenuState::draw() {
     menu->draw();
 }
 
-// Handler for Menu
+// Handler for ButtonGroup
 void MenuState::set_next_state(StateID next_state) {
     this->next_state = next_state;
 }
