@@ -13,12 +13,24 @@
 #include "Direction.hpp"
 #include "Food.hpp"
 
+/* TODO: Add x, y, width, and height ints so that it can be drawn as a section of the display.
+    This is important because PlayState will have a top band containing the score and other info,
+    while the Snake game itself (GameClass) will be displayed underneath.
+*/
+
 class GameClass {
 private:
     Platform* platform;
     GameData* game_data;
     std::function<void()> exit_handler;
     std::function<void()> game_over_handler;
+    int x {};
+    int y {};
+    int width {};
+    int height {};
+
+    int tilegrid_num_rows {};
+    int tilegrid_num_cols {};
 
     bool redraw {false};
     bool done {false};
@@ -47,9 +59,14 @@ private:
     bool check_death(Snake snake);
 
 public:
-    GameClass(Platform* platform, GameData* gamed_data, std::function<void()> exit_handler, std::function<void()> game_over_handler);
+    GameClass(Platform* platform, 
+                GameData* gamed_data, 
+                std::function<void()> exit_handler, 
+                std::function<void()> game_over_handler);
 
     ~GameClass();
+
+    void set_dimensions(int x, int y, int width, int height);
 
     void loop();
 

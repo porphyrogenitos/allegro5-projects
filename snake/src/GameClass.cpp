@@ -1,6 +1,10 @@
 #include "GameClass.hpp"
 
-GameClass::GameClass(Platform* platform, GameData* game_data, std::function<void()> exit_handler, std::function<void()> game_over_handler) {
+GameClass::GameClass(Platform* platform, 
+                    GameData* gamed_data, 
+                    std::function<void()> exit_handler, 
+                    std::function<void()> game_over_handler)
+{
     this->platform = platform;
     this->game_data = game_data;
     this->exit_handler = exit_handler;
@@ -8,6 +12,16 @@ GameClass::GameClass(Platform* platform, GameData* game_data, std::function<void
 }
 
 GameClass::~GameClass() {}
+
+void GameClass::set_dimensions(int x, int y, int width, int height) {
+    this->x = x;
+    this->y = y;
+    this->width = width;
+    this->height = height;
+
+    tilegrid_num_rows = height / TILE_WIDTH;
+    tilegrid_num_cols = width / TILE_WIDTH;
+}
 
 void GameClass::print_tileset(std::unordered_set<Tile> tiles) {
     for (auto iter = tiles.begin(); iter != tiles.end(); ++iter) {
@@ -17,10 +31,10 @@ void GameClass::print_tileset(std::unordered_set<Tile> tiles) {
 }
 
 void GameClass::display_food(Food food, bool isVisible) {
-    int x1 = food.col * TILE_WIDTH;
-    int y1 = food.row * TILE_WIDTH;
-    int x2 = (food.col + 1) * TILE_WIDTH;
-    int y2 = (food.row + 1) * TILE_WIDTH;
+    int x1 = food.col * TILE_WIDTH + x;
+    int y1 = food.row * TILE_WIDTH + y;
+    int x2 = (food.col + 1) * TILE_WIDTH + x;
+    int y2 = (food.row + 1) * TILE_WIDTH + y;
 
     int center_x = (x1 + x2) / 2;
     int center_y = (y1 + y2) / 2;
@@ -59,10 +73,10 @@ void GameClass::display_snake(Snake snake, bool isVisible) {
         int cur_row = pos.first;
         int cur_col = pos.second;
 
-        int x1 = cur_col * TILE_WIDTH;
-        int y1 = cur_row * TILE_WIDTH;
-        int x2 = (cur_col + 1) * TILE_WIDTH;
-        int y2 = (cur_row + 1) * TILE_WIDTH;
+        int x1 = cur_col * TILE_WIDTH + x;
+        int y1 = cur_row * TILE_WIDTH + y;
+        int x2 = (cur_col + 1) * TILE_WIDTH + x;
+        int y2 = (cur_row + 1) * TILE_WIDTH + y;
 
         int center_x = (x1 + x2) / 2;
         int center_y = (y1 + y2) / 2;
@@ -74,10 +88,10 @@ void GameClass::display_snake(Snake snake, bool isVisible) {
     int head_col = snake.get_head_tile().second;
 
     // Draw head.
-    int head_x1 = head_col * TILE_WIDTH;
-    int head_y1 = head_row * TILE_WIDTH;
-    int head_x2 = (head_col + 1) * TILE_WIDTH;
-    int head_y2 = (head_row + 1) * TILE_WIDTH;
+    int head_x1 = head_col * TILE_WIDTH + x;
+    int head_y1 = head_row * TILE_WIDTH + y;
+    int head_x2 = (head_col + 1) * TILE_WIDTH + x;
+    int head_y2 = (head_row + 1) * TILE_WIDTH + y;
 
     int center_x = (head_x1 + head_x2) / 2;
     int center_y = (head_y1 + head_y2) / 2;
@@ -95,13 +109,13 @@ void GameClass::display_snake(Snake snake, bool isVisible) {
  */
 void GameClass::draw_grid(int num_rows, int num_cols) {
     for (int row = 0; row < num_rows; row++) {
-        int y = row * TILE_WIDTH;
-        al_draw_line(0, y, DISP_WIDTH, y, al_map_rgb(255, 0, 0), 1.0);
+        int grid_y = row * TILE_WIDTH + y;
+        al_draw_line(x, grid_y, x + width, grid_y, al_map_rgb(255, 0, 0), 1.0);
     }
 
     for (int col = 0; col < num_cols; col++) {
-        int x = col * TILE_WIDTH;
-        al_draw_line(x, 0, x, DISP_HEIGHT, al_map_rgb(255, 0, 0), 1.0);
+        int grid_x = col * TILE_WIDTH + x;
+        al_draw_line(grid_x, y, grid_x, y + height, al_map_rgb(255, 0, 0), 1.0);
     }
 }
 
@@ -130,7 +144,6 @@ bool GameClass::check_death(Snake snake) {
     Tile head = snake.get_segment_position(0);
     if (head.first < 0 || head.first >= tilegrid_num_rows
         || head.second < 0 || head.second >= tilegrid_num_cols) {
-\
             return true;
     }
 
@@ -145,12 +158,20 @@ bool GameClass::check_death(Snake snake) {
 }
 
 void GameClass::tick() {
+    if (check_death(snake)) {
+        std::cout << "DIED." << std::endl;
+
+        //TODO: Perhaps pass screencap to the state.
+        //TODO: Rename to handle_death()
+        game_over_handler();
+    }
+
     if(platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_UP))
         snake.update_head_dir(Direction::north);
     else if(platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_DOWN))
         snake.update_head_dir(Direction::south);
     else if(platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_LEFT))
-    snake.update_head_dir(Direction::west);
+        snake.update_head_dir(Direction::west);
     else if(platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_RIGHT))
         snake.update_head_dir(Direction::east);
 
@@ -168,19 +189,10 @@ void GameClass::tick() {
     }
 
     snake.move();
-
-    // TODO: Right spot for this check?
-    if (check_death(snake)) {
-        std::cout << "DIED." << std::endl;
-
-        //TODO: Perhaps pass screencap to the state.
-        //TODO: Rename to handle_death()
-        game_over_handler();
-    }
 }
 
 void GameClass::draw() {
     display_food(food, true);
     display_snake(snake, true);
-    // draw_grid(tilegrid_num_rows, tilegrid_num_cols); 
+    draw_grid(tilegrid_num_rows, tilegrid_num_cols); 
 }
