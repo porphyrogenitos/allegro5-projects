@@ -1,7 +1,7 @@
 #include "GameClass.hpp"
 
 GameClass::GameClass(Platform* platform, 
-                    GameData* gamed_data, 
+                    GameData* game_data, 
                     std::function<void()> exit_handler, 
                     std::function<void()> game_over_handler)
 {

@@ -19,8 +19,12 @@
 
 #include <string>
 #include <allegro5/allegro5.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 struct GameData {
     std::string player_name {"Player 1"};
     int current_score {0};
     ALLEGRO_BITMAP *screen_cap {};
+
+    ALLEGRO_FONT* font {al_load_ttf_font("assets/Consolas.ttf", 25, 0)};
 };

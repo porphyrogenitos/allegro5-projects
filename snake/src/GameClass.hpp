@@ -13,11 +13,6 @@
 #include "Direction.hpp"
 #include "Food.hpp"
 
-/* TODO: Add x, y, width, and height ints so that it can be drawn as a section of the display.
-    This is important because PlayState will have a top band containing the score and other info,
-    while the Snake game itself (GameClass) will be displayed underneath.
-*/
-
 class GameClass {
 private:
     Platform* platform;

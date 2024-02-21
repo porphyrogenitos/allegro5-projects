@@ -5,10 +5,12 @@
 #include "State.hpp"
 #include "../GameClass.hpp"
 #include "../Platform.hpp"
+#include "../Label.hpp"
 
 class PlayState : public State {
 private:
     std::unique_ptr<GameClass> gameclass;
+    std::unique_ptr<Label> score_label;
 public:
     PlayState(StateID curr_state, Platform* platform, GameData* game_data);
     void tick();

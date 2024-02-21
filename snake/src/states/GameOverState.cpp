@@ -17,4 +17,5 @@ void GameOverState::tick() {
 void GameOverState::draw() {
     al_draw_filled_rectangle(0, 0, DISP_WIDTH, DISP_HEIGHT, al_map_rgb(0, 0, 0));
     label.draw();
+    score_label.draw();
 }

@@ -23,7 +23,17 @@ private:
                 al_get_font_line_height(font), // height
                 "GAME OVER", 
                 al_map_rgb(255, 255, 255), 
-                font};
+                font,
+                ALLEGRO_ALIGN_CENTRE};
+    
+    Label score_label {DISP_WIDTH / 2 - 50, // For centering along x
+                DISP_HEIGHT / 2 + 40 - al_get_font_ascent(font) / 2, // For centering along y
+                100, // width
+                al_get_font_line_height(font), // height
+                "YOUR SCORE: " + std::to_string(game_data->current_score), 
+                al_map_rgb(255, 255, 255), 
+                font,
+                ALLEGRO_ALIGN_CENTRE};
 public:
     GameOverState(StateID curr_state, Platform* platform, GameData* game_data);
     void tick();
