@@ -26,5 +26,6 @@ struct GameData {
     int current_score {0};
     ALLEGRO_BITMAP *screen_cap {};
 
+    // TODO: font gets destroyed in GameHost::deinit(). Is that a good idea?
     ALLEGRO_FONT* font {al_load_ttf_font("assets/Consolas.ttf", 25, 0)};
 };

@@ -11,6 +11,21 @@ Label::Label(int x, int y, int width, int height, std::string text, ALLEGRO_COLO
     this->alignment_flag = alignment_flag;
 }
 
+Label::Label() {}
+
+void Label::set_dimensions(int x, int y, int width, int height)
+{
+    this->x = x;
+    this->y = y;
+    this->width = width;
+    this->height = height;
+}
+
+void Label::set_dimensions(int width, int height)
+{
+    set_dimensions(0, 0, width, height);
+}
+
 void Label::draw() {
     switch (alignment_flag)
     {

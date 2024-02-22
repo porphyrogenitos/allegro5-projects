@@ -15,8 +15,8 @@ PlayState::PlayState(StateID curr_state, Platform* platform, GameData* game_data
 } 
 
 void PlayState::tick() {
-    if (platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_P))
-        while (true) {}
+    if (platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_P)) 
+        while (true) {} // Temporary
     
     gameclass->tick();
     score_label->text = std::to_string(game_data->current_score);
