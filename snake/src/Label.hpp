@@ -5,6 +5,10 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 
+/**
+ * @brief GUI label for displaying text.
+ * 
+ */
 struct Label {
 public:
     std::string text;

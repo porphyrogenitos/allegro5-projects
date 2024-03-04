@@ -9,6 +9,10 @@
 #include "Button.hpp"
 #include "Platform.hpp"
 
+/**
+ * @brief Vertical group of selectable buttons. Typically for use in menus.
+ * 
+ */
 class ButtonGroup {
 
     //TODO: I want it to automatically calculate the layout of 3 buttons based on

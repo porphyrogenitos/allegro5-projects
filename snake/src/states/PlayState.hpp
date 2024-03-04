@@ -7,6 +7,10 @@
 #include "../Platform.hpp"
 #include "../Label.hpp"
 
+/**
+ * @brief Controls snake gameplay and display.
+ * 
+ */
 class PlayState : public State {
 private:
     std::unique_ptr<GameClass> gameclass;

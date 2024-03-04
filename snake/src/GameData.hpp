@@ -1,6 +1,11 @@
-/*
-    TODO
+#pragma once
 
+#include <string>
+#include <allegro5/allegro5.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+
+/*
     All common game data will be stored in a GameData object, which can then be passed to State objects.
     This is so that GameHost (i.e. the application) doesn't act as storage -- we move all game storage to a separate object.
 
@@ -14,13 +19,6 @@
             -Keyboard controls
         -(TODO) Current level
 */
-
-#pragma once
-
-#include <string>
-#include <allegro5/allegro5.h>
-#include <allegro5/allegro_font.h>
-#include <allegro5/allegro_ttf.h>
 struct GameData {
     std::string player_name {"Player 1"};
     int current_score {0};

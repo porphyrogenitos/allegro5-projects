@@ -16,7 +16,7 @@ class Snake {
         int length {};
         Direction head_dir {};
         std::array<Tile, 200> segments {}; // Tile positions of segments.
-        std::unordered_set<Tile> occupied_tiles;
+        std::unordered_set<Tile> occupied_tiles; // Set of tiles occupied by this snake.
         
     public:
         /**

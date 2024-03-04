@@ -21,7 +21,6 @@ Button::Button(std::string text, ALLEGRO_FONT* font, std::function<void()> handl
         this->handler = handler;
 }
 
-//Draws white text against a black rectangle when unhovered, and the reverse when hovered.
 void Button::draw() {
 
         ALLEGRO_COLOR text_color = al_map_rgb(255, 255, 255);
@@ -40,12 +39,10 @@ void Button::select() {
     handler();
 }
 
-// Gets the center x-coordinate of the Button.
 int Button::get_center_x() {
     return x + (width / 2);
 }
 
-// Gets the center y-coordinate of the Button.
 int Button::get_center_y() {
     return y + (height / 2) - (al_get_font_line_height(font) / 2);
 }

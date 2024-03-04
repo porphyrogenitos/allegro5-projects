@@ -10,6 +10,10 @@
 
 class StateManager;
 
+/**
+ * @brief Factory for creating and returning states.
+ * 
+ */
 class StateFactory {
 public:
     virtual std::unique_ptr<State> create(StateID st_enum, Platform* platform, GameData* game_data);

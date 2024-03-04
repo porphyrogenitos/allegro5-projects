@@ -2,6 +2,10 @@
 
 #include "KeyboardManager.hpp"
 
+/**
+ * @brief Contains some useful objects.
+ * 
+ */
 struct Platform {
     KeyboardManager keyboard_man {};
 

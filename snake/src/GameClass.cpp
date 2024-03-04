@@ -101,12 +101,6 @@ void GameClass::display_snake(Snake snake, bool isVisible) {
         al_draw_filled_circle(center_x, center_y, rad, al_map_rgb(0, 0, 0));
 }
 
-/**
- * @brief Temporary function for making the grid of tiles visible.
- * 
- * @param num_rows 
- * @param num_cols 
- */
 void GameClass::draw_grid(int num_rows, int num_cols) {
     for (int row = 0; row < num_rows; row++) {
         int grid_y = row * TILE_WIDTH + y;

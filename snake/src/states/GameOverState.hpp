@@ -6,10 +6,14 @@
 #include "../Constants.hpp"
 #include "../Platform.hpp"
 #include "State.hpp"
-#include "../Platform.hpp"
 #include "../GameData.hpp"
 #include "../Button.hpp"
 #include "../Label.hpp"
+
+/**
+ * @brief Displays the Game Over screen, which includes player's final score.
+ * 
+ */
 
 class GameOverState : public State {
 private:
@@ -29,7 +33,20 @@ private:
                 font,
                 ALLEGRO_ALIGN_CENTRE};
 public:
+    /**
+     * @brief Construct a new GameOverState object
+     */
     GameOverState(StateID curr_state, Platform* platform, GameData* game_data);
+
+    /**
+     * @brief Checks if the player has pressed Esc to exit.
+     * 
+     */
     void tick();
+
+    /**
+     * @brief Draws the Game Over text as well as the player's score.
+     * 
+     */
     void draw();
 };

@@ -22,9 +22,10 @@ struct Player {
     int points {};
 };
 
-// TODO: This is going to host (i.e. be the container for) levels and menus.
-// Game.cpp should be converted to a class that can be instantiated here.
-
+/**
+ * @brief The overall game application.
+ * 
+ */
 class GameHost {
 private:
     ALLEGRO_TIMER* timer;
