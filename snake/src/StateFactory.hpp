@@ -4,6 +4,7 @@
 #include "Platform.hpp"
 #include "GameData.hpp"
 #include "states/State.hpp"
+#include "states/StateID.hpp"
 #include "states/MenuState.hpp"
 #include "states/PlayState.hpp"
 #include "states/GameOverState.hpp"

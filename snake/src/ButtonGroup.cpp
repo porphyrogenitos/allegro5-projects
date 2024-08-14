@@ -64,6 +64,8 @@ void ButtonGroup::draw() {
 }
 
 void ButtonGroup::tick() {
+    // TODO: Make it scroll down the buttons more slowly -- right now 
+    // it's too easy to go past the button you want.
     if (platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_ENTER))
         menu_buttons[hovered_item].select();
     if (platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_DOWN)) {

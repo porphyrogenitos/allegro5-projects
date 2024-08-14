@@ -4,12 +4,7 @@
 #include <memory>
 #include "../Platform.hpp"
 #include "../GameData.hpp"
-
-enum class StateID {
-    MENU,
-    PLAY,
-    GAME_OVER,
-};
+#include "StateID.hpp"
 
 /**
  * @brief Base class for game states. A state can update itself, detect input, and

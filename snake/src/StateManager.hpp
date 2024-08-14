@@ -2,6 +2,7 @@
 #include "Platform.hpp"
 #include "GameData.hpp"
 #include "states/State.hpp"
+#include "states/StateID.hpp"
 
 class StateFactory;
 
