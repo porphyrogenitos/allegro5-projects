@@ -1,29 +1,44 @@
+#include <iostream>
 #include <functional>
 #include "MenuState.hpp"
 #include "../Constants.hpp"
 
+void printControls() {
+    std::cout << "Controls\n";
+}
+
+void printAbout() {
+    std::cout << "About\n";
+}
+
+void printExit() {
+    std::cout << "Exit\n";
+}
 
 MenuState::MenuState(StateID curr_state, Platform* platform, GameData* game_data) : State(curr_state, platform, game_data) {
-    menu = std::make_unique<ButtonGroup>(this->platform, 0, 0, DISP_WIDTH, DISP_HEIGHT);
+    menu_buttons = std::make_unique<ButtonGroup>(this->platform, 0, 0, DISP_WIDTH, DISP_HEIGHT);
 
 
-    menu->add_button("PLAY", std::bind(&MenuState::set_next_state, this, StateID::PLAY));
-    //menu->add_button("CONTROLS", ...);
-    //menu->add_button("ABOUT", ...);
-    //menu->add_button("EXIT", ...);
+    menu_buttons->add_button("PLAY", std::bind(&MenuState::set_next_state, this, StateID::PLAY));
+    //menu_buttons->add_button("CONTROLS", std::bind(&MenuState::set_next_state, this, StateID::CONTROLS));
+    menu_buttons->add_button("CONTROLS", std::bind(&MenuState::set_next_state, this, StateID::CONTROLS));
+    menu_buttons->add_button("ABOUT", std::bind(printAbout));
+    menu_buttons->add_button("EXIT", std::bind(printExit));
 
 }
 
 void MenuState::tick() {
-    menu->tick();
+    menu_buttons->tick();
 }
 
 void MenuState::draw() {
-    menu->draw();
+    menu_buttons->draw();
 }
 
 // Handler for ButtonGroup
 void MenuState::set_next_state(StateID next_state) {
     this->next_state = next_state;
 }
+
+
 

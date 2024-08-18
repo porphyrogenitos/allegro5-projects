@@ -11,6 +11,7 @@ all:
 	src/states/PlayState.cpp \
 	src/states/MenuState.cpp \
 	src/states/GameOverState.cpp \
+	src/states/ControlsState.cpp \
 	src/GameHost.cpp \
 	src/ButtonGroup.cpp \
 	src/Button.cpp \

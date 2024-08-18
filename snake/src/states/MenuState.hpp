@@ -8,7 +8,7 @@
 #include "../ButtonGroup.hpp"
 
 class MenuState : public State{
-    std::unique_ptr<ButtonGroup> menu;
+    std::unique_ptr<ButtonGroup> menu_buttons;
 public:
     MenuState(StateID curr_state, Platform* platform, GameData* game_data);
     void tick();

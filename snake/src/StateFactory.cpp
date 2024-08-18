@@ -7,6 +7,8 @@ std::unique_ptr<State> StateFactory::create(StateID st_enum, Platform* platform,
     {
     case StateID::MENU:
         return std::make_unique<MenuState>(st_enum, platform, game_data);
+    case StateID::CONTROLS:
+        return std::make_unique<ControlsState>(st_enum, platform, game_data);
     case StateID::PLAY:
         return std::make_unique<PlayState>(st_enum, platform, game_data);
     case StateID::GAME_OVER:

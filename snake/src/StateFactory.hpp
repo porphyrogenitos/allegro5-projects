@@ -6,6 +6,7 @@
 #include "states/State.hpp"
 #include "states/StateID.hpp"
 #include "states/MenuState.hpp"
+#include "states/ControlsState.hpp"
 #include "states/PlayState.hpp"
 #include "states/GameOverState.hpp"
 
