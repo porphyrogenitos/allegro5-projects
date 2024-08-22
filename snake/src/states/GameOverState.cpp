@@ -26,7 +26,7 @@ GameOverState::GameOverState(StateID curr_state, Platform* platform, GameData* g
 
 void GameOverState::tick() {
     if (platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_ESCAPE)) {
-        platform->exit = true;
+        this->next_state = StateID::MENU;
         return;
     }
 }

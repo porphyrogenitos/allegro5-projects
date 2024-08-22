@@ -11,9 +11,6 @@ void printAbout() {
     std::cout << "About\n";
 }
 
-void printExit() {
-    std::cout << "Exit\n";
-}
 
 MenuState::MenuState(StateID curr_state, Platform* platform, GameData* game_data) : State(curr_state, platform, game_data) {
     menu_buttons = std::make_unique<ButtonGroup>(this->platform, 0, 0, DISP_WIDTH, DISP_HEIGHT);
@@ -23,8 +20,12 @@ MenuState::MenuState(StateID curr_state, Platform* platform, GameData* game_data
     //menu_buttons->add_button("CONTROLS", std::bind(&MenuState::set_next_state, this, StateID::CONTROLS));
     menu_buttons->add_button("CONTROLS", std::bind(&MenuState::set_next_state, this, StateID::CONTROLS));
     menu_buttons->add_button("ABOUT", std::bind(printAbout));
-    menu_buttons->add_button("EXIT", std::bind(printExit));
+    menu_buttons->add_button("EXIT", std::bind(&MenuState::set_exit, this));
 
+}
+
+void MenuState::set_exit() {
+    this->platform->exit = true;
 }
 
 void MenuState::tick() {
