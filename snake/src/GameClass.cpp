@@ -152,13 +152,7 @@ bool GameClass::check_death(Snake snake) {
 }
 
 void GameClass::tick() {
-    if (check_death(snake)) {
-        std::cout << "DIED." << std::endl;
 
-        //TODO: Perhaps pass screencap to the state.
-        //TODO: Rename to handle_death()
-        game_over_handler();
-    }
 
     if(platform->keyboard_man.key_was_pressed(ALLEGRO_KEY_UP))
         snake.update_head_dir(Direction::north);
@@ -183,6 +177,14 @@ void GameClass::tick() {
     }
 
     snake.move();
+
+    if (check_death(snake)) {
+        std::cout << "DIED." << std::endl;
+
+        //TODO: Perhaps pass screencap to the state.
+        //TODO: Rename to handle_death()
+        game_over_handler();
+    }
 }
 
 void GameClass::draw() {
