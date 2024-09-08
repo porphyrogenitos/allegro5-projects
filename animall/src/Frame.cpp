@@ -13,7 +13,7 @@ Frame::Frame(int width, int height) {
 /*
   Sets bitmap to val at bit (x, y)
 
-  Note: (0, 0) is top right of bitmap
+  Note: (0, 0) is top left of bitmap
 */
 void Frame::set(int x, int y, bool val) {
   bitmap[x][y] = val;
@@ -21,6 +21,10 @@ void Frame::set(int x, int y, bool val) {
 
 bool Frame::get(int x, int y) {
   return bitmap[x][y];
+}
+
+int Frame::get_width() {
+  return width;
 }
 
 void Frame::print() {

@@ -13,5 +13,6 @@ public:
   Frame(int width, int height);
   void set(int x, int y, bool val);
   bool get(int x, int y);
+  int get_width();
   void print();
 };
