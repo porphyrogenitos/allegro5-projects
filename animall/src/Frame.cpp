@@ -19,6 +19,14 @@ void Frame::set(int x, int y, bool val) {
   bitmap[x][y] = val;
 }
 
+void Frame::set_all(bool val) {
+  for (int r = 0; r < height; r++) {
+    for (int c = 0; c < width; c++) {
+      bitmap[r][c] = val;
+    }
+  }
+}
+
 bool Frame::get(int x, int y) {
   return bitmap[x][y];
 }
