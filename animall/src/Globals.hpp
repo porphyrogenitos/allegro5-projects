@@ -7,3 +7,6 @@ extern int CANVAS_WIDTH;
 extern int CANVAS_HEIGHT;
 
 extern int FPS;
+
+extern const int KEY_SEEN;
+extern const int KEY_RELEASED;

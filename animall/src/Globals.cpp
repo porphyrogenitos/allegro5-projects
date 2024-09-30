@@ -1,9 +1,12 @@
 #include "Globals.hpp"
 
-extern int FRAME_WIDTH;
-extern int FRAME_HEIGHT;
+int FRAME_WIDTH = 20;
+int FRAME_HEIGHT = 20;
 
-extern int CANVAS_WIDTH;
-extern int CANVAS_HEIGHT;
+int CANVAS_WIDTH = 200;
+int CANVAS_HEIGHT = 200;
 
-extern int FPS;
+int FPS = 10;
+
+extern constexpr int KEY_SEEN = 1;
+extern constexpr int KEY_RELEASED = 2;

@@ -1,7 +1,13 @@
 #pragma once
 
+#include <utility>
 #include <vector>
 #include <memory>
+
+struct Bit {
+  int x {};
+  int y {};
+};
 
 class Frame {
 private:
@@ -12,9 +18,10 @@ private:
 
 public:
   Frame(int width, int height);
-  void set(int x, int y, bool val);
+  Frame();
+  void set(const Bit& bit, bool val);
   void set_all(bool val);
-  bool get(int x, int y);
+  bool get(const Bit& bit);
   int get_width();
   void print();
 };

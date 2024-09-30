@@ -6,17 +6,17 @@
 int main() {
   std::cout << "A frame\n";
   Frame frame {20, 20};
-  frame.set(5, 2, true);
+  frame.set(Bit {10, 10}, true);
   frame.print();
 
-  Canvas canvas {0, 0, 100, 100, &frame};
+  Canvas canvas {Pixel{0, 0}, 100, 100, &frame};
   
   Animation anim {24, 20, 20};
 
   std::cout << "Animation frame 0\n";
   Frame f = anim.get_cur_frame();
   f.print();
-  f.set(2, 3, true);
+  f.set(Bit{2, 3}, true);
   anim.update_cur_frame(f);
   std::cout << "Animation frame after modification\n";
   anim.get_cur_frame().print();

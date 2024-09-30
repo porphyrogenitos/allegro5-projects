@@ -10,25 +10,28 @@ Frame::Frame(int width, int height) {
   }
 }
 
+Frame::Frame() : Frame::Frame(0, 0) {}
+
 /*
   Sets bitmap to val at bit (x, y)
 
   Note: (0, 0) is top left of bitmap
 */
-void Frame::set(int x, int y, bool val) {
-  bitmap[x][y] = val;
+void Frame::set(const Bit& bit, bool val) {
+  bitmap[bit.x][bit.y] = val;
 }
 
 void Frame::set_all(bool val) {
-  for (int r = 0; r < height; r++) {
-    for (int c = 0; c < width; c++) {
-      bitmap[r][c] = val;
+  Bit bit {};
+  for (bit.y = 0; bit.y < height; bit.y++) {
+    for (bit.x = 0; bit.x < width; bit.x++) {
+      bitmap[bit.y][bit.x] = val;
     }
   }
 }
 
-bool Frame::get(int x, int y) {
-  return bitmap[x][y];
+bool Frame::get(const Bit& bit) {
+  return bitmap[bit.x][bit.y];
 }
 
 int Frame::get_width() {
@@ -36,9 +39,10 @@ int Frame::get_width() {
 }
 
 void Frame::print() {
-  for (int r = 0; r < height; r++) {
-    for (int c = 0; c < width; c++) {
-      std::cout << get(r, c) << ", ";
+  Bit bit {};
+  for (bit.y = 0; bit.y < height; bit.y++) {
+    for (bit.x = 0; bit.x < width; bit.x++) {
+      std::cout << get(bit) << ", ";
     }
     std::cout << "\n";
   }

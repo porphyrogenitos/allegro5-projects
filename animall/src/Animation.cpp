@@ -13,10 +13,11 @@ Animation::Animation(int FPS, int frame_width, int frame_height) {
 
 Frame Animation::next_frame() {
   if (index == frames.size() - 1) {
-    frames.push_back(Frame(this->frame_width, this->frame_height));
+    index = 0;
   }
-
-  index++;
+  else {
+    index++;
+  }
 
   return this->frames[index];
 }
@@ -38,7 +39,12 @@ void Animation::update_cur_frame(Frame new_frame) {
 }
 
 void Animation::insert_blank_frame() {
-  frames.insert(frames.begin() + index, Frame(this->frame_width, this->frame_height));
+  if (index == frames.size() - 1) {
+    frames.push_back(Frame(this->frame_width, this->frame_height));
+  }
+  else {
+    frames.insert(frames.begin() + index, Frame(this->frame_width, this->frame_height));
+  }
 }
 
 void Animation::clear_frame() {
