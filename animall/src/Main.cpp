@@ -1,15 +1,19 @@
 #include <iostream>
+#include "Platform.hpp"
 #include "Frame.hpp"
 #include "Canvas.hpp"
 #include "Animation.hpp"
+#include "Application.hpp"
 
 int main() {
+  /*
+  Platform platform {};
   std::cout << "A frame\n";
   Frame frame {20, 20};
   frame.set(Bit {10, 10}, true);
   frame.print();
 
-  Canvas canvas {Pixel{0, 0}, 100, 100, &frame};
+  Canvas canvas {&platform, Pixel{0, 0}, 100, 100, &frame};
   
   Animation anim {24, 20, 20};
 
@@ -37,4 +41,7 @@ int main() {
   std::cout << "Go to prev frame (0)\n";
   Frame f3 = anim.prev_frame();
   anim.get_cur_frame().print();
+  */
+
+  Application application {};
 }

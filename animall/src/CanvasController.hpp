@@ -1,9 +1,10 @@
 #pragma once
 
 #include <memory>
+#include <allegro5/allegro5.h>
 #include "Platform.hpp"
 #include "Animation.hpp"
-#include <allegro5/allegro5.h>
+
 
 #include "Canvas.hpp"
 #include "Frame.hpp"
@@ -23,8 +24,6 @@ public:
   CanvasController(Platform* platform);
   void draw();
   void tick();
-  Bit convert_pixel_to_frame_bit();
-  Pixel convert_frame_bit_to_pixel();
   void play();
   void pause();
 };

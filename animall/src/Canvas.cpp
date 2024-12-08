@@ -1,16 +1,19 @@
 #include <allegro5/allegro5.h>
 #include "Canvas.hpp"
 
-Canvas::Canvas(Pixel tl_pixel, int width, int height, Frame* frame) {
+Canvas::Canvas(Platform* platform, Pixel tl_pixel, int width, int height, Frame* frame) {
+  this->platform = platform;
   this->tl_pixel.x = tl_pixel.x;
   this->tl_pixel.y = tl_pixel.y;
   this->width = width;
   this->height = height;
   current_frame = frame;
   bit_pixel_width = width / frame->get_width();
+  drag = false;
 }
 
-Canvas::Canvas(Frame* frame) {
+Canvas::Canvas(Platform* platform, Frame* frame) {
+  this->platform = platform;
   current_frame = frame;
 }
 
@@ -45,6 +48,55 @@ Bit Canvas::get_frame_bit_of_pixel(const Pixel& pixel) {
 // TODO
 void Canvas::draw() {
 
+// Draw filled white rectangle
+  al_draw_filled_rectangle(tl_pixel.x, tl_pixel.y, tl_pixel.x + width, tl_pixel.y + height,
+			  al_map_rgb(255, 255, 255));
+
+}
+
+void Canvas::tick() {
+  //If mouse clicked within canvas, get mouse xy position on canvas and update
+  //corresponding Frame bit based on Canvas draw_mode
+  //TODO: Need to consider what happens if you click and drag
+  if (platform->mouse_manager.moved() {
+    if (drag) {
+      int x = mouse_manager.get_mouse_x();
+      int y = mouse_manager.get_mouse_y();
+      if (canvas->contains_pixel(x, y)) {
+        switch (canvas->get_draw_mode()) {
+	  case DrawMode::PENCIL:
+	    Bit frame_bit = get_frame_bit_of_pixel(Pixel {x, y});
+	    update_frame_bit(frame_bit, true);
+	    break;
+	  case DrawMode::ERASER:
+	    Bit frame_bit = get_frame_bit_of_pixel(Pixel {x, y});
+	    update_frame_bit(frame_bit, false);
+	    break;
+        }
+      }
+    }
+  }
+  
+  if (platform->mouse_manager.mouse_lbutton_down()) {
+    drag = true;
+    int x = mouse_manager.get_mouse_x();
+    int y = mouse_manager.get_mouse_y();
+    if (canvas->contains_pixel(x, y) {
+      switch (canvas->get_draw_mode()) {
+	case DrawMode::PENCIL:
+	  Bit frame_bit = get_frame_bit_of_pixel(Pixel {x, y});
+	  update_frame_bit(frame_bit, true);
+	  break;
+	case DrawMode::ERASER:
+	  Bit frame_bit = get_frame_bit_of_pixel(Pixel {x, y});
+	  update_frame_bit(frame_bit, false);
+	  break;
+      }
+    }
+  }
+  if (platform->mouse_manager.mouse_lbutton_release()) {
+    drag = false;
+  }
 }
 
 void Canvas::set_draw_mode(DrawMode new_mode) {

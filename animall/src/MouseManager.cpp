@@ -1,22 +1,32 @@
 #include "MouseManager.hpp"
 
-MouseManager::MouseManager() {}
+//TODO: How to set this up?
 
-void MouseManager::tick() {
-  //TODO (not sure this function is needed)
-}
+MouseManager::MouseManager() {}
 
 void MouseManager::mouse_lbutton_down() {
   lbutton = true;
 }
 
+bool MouseManager::mouse_lbutton_is_down() {
+  return lbutton;
+}
 void MouseManager::mouse_lbutton_release() {
   lbutton = false;
 }
 
-void MouseManager::mouse_moved(int new_x, int new_y) {
+void MouseManager::move_mouse(int new_x, int new_y) {
   mouse_x = new_x;
   mouse_y = new_y;
+  mouse_moved = true;
+}
+
+bool MouseManager::was_moved() {
+  return moved;
+}
+
+void MouseManager::end_move() {
+  mouse_moved = false;
 }
 
 int get_mouse_x() {
