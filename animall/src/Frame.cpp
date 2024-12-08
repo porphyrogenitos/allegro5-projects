@@ -19,7 +19,7 @@ Frame::Frame() : Frame::Frame(100, 100) {}
   Note: (0, 0) is top left of bitmap
 */
 void Frame::set(const Bit& bit, bool val) {
-  bitmap[width * bit.x + bit.y] = val;
+  bitmap[width * bit.y + bit.x] = val;
 }
 
 void Frame::set_all(bool val) {
@@ -30,7 +30,7 @@ void Frame::set_all(bool val) {
 }
 
 bool Frame::get(const Bit& bit) {
-  return bitmap[width * bit.x + bit.y];
+  return bitmap[width * bit.y + bit.x];
 }
 
 int Frame::get_width() {
