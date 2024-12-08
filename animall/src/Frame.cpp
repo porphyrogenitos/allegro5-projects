@@ -4,13 +4,14 @@
 Frame::Frame(int width, int height) {
   this->width = width;
   this->height = height;
+  bitmap.resize(width * height);
   
-  for (int i = 0; i < height; i++) {
-    bitmap.push_back(std::vector<bool>(width, false));
+  for (int i = 0; i < width * height; i++) {
+    bitmap.push_back(false);
   }
 }
 
-Frame::Frame() : Frame::Frame(0, 0) {}
+Frame::Frame() : Frame::Frame(100, 100) {}
 
 /*
   Sets bitmap to val at bit (x, y)
@@ -18,20 +19,18 @@ Frame::Frame() : Frame::Frame(0, 0) {}
   Note: (0, 0) is top left of bitmap
 */
 void Frame::set(const Bit& bit, bool val) {
-  bitmap[bit.x][bit.y] = val;
+  bitmap[width * bit.x + bit.y] = val;
 }
 
 void Frame::set_all(bool val) {
   Bit bit {};
-  for (bit.y = 0; bit.y < height; bit.y++) {
-    for (bit.x = 0; bit.x < width; bit.x++) {
-      bitmap[bit.y][bit.x] = val;
-    }
+  for (int i = 0; i < width * height; i++) {
+    bitmap[i] = val;
   }
 }
 
 bool Frame::get(const Bit& bit) {
-  return bitmap[bit.x][bit.y];
+  return bitmap[width * bit.x + bit.y];
 }
 
 int Frame::get_width() {

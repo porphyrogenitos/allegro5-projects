@@ -13,7 +13,7 @@ class Frame {
 private:
   int width {};
   int height {};
-  std::vector<std::vector<bool>> bitmap {};
+  std::vector<bool> bitmap {};
   //TODO: A variable for indicating whether the frame is on 2s, 3s, etc.
 
 public:
